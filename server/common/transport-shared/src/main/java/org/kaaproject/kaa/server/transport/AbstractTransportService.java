@@ -1,18 +1,19 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
+
 package org.kaaproject.kaa.server.transport;
 
 import java.io.IOException;
@@ -95,11 +96,12 @@ public abstract class AbstractTransportService implements TransportService {
             try {
                 Class<?> clazz = Class.forName(config.getTransportClass());
                 Transport transport = (Transport) clazz.newInstance();
-                LOG.info("Lookup of transport configuration file {}", config.getConfigFileName());
-                URL configFileURL = this.getClass().getClassLoader().getResource(config.getConfigFileName());
+                String transportConfigFile = getTransportConfigPrefix() + "-" + config.getConfigFileName();
+                LOG.info("Lookup of transport configuration file {}", transportConfigFile);
+                URL configFileURL = this.getClass().getClassLoader().getResource(transportConfigFile);
                 GenericAvroConverter<GenericRecord> configConverter = new GenericAvroConverter<GenericRecord>(config.getConfigSchema());
                 GenericRecord configRecord = configConverter.decodeJson(Files.readAllBytes(Paths.get(configFileURL.toURI())));
-                LOG.info("Lookup of transport configuration file {}", config.getConfigFileName());
+                LOG.info("Lookup of transport configuration file {}", transportConfigFile);
                 TransportContext context = new TransportContext(transportProperties, getPublicKey(), getMessageHandler());
                 transport.init(new GenericTransportContext(context, configConverter.encode(configRecord)));
                 transports.put(config.getId(), transport);
@@ -139,6 +141,8 @@ public abstract class AbstractTransportService implements TransportService {
         LOG.info("Removing transport update listener {}.", listener);
         return listeners.remove(listener);
     }
+    
+    protected abstract String getTransportConfigPrefix();
 
     protected abstract Properties getServiceProperties();
 

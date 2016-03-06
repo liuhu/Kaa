@@ -1,17 +1,17 @@
-/*
- * Copyright 2014-2015 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 /*
@@ -91,11 +91,14 @@ void print_mem_stat(kaa_client_t *kaa_client);
  * Strategy-specific configuration parameters used by Kaa log collection feature.
  */
 #define KAA_DEMO_MAX_UPLOAD_THRESHOLD     15   /* Size of collected serialized logs needed to initiate log upload */
-#define KAA_DEMO_MAX_LOG_BUCKET_SIZE      16   /* Max size of a log batch has been sent by SDK during one upload. */
+/* Max size of a log batch has been sent by SDK during one upload. */
+#define KAA_DEMO_MAX_LOG_BUCKET_SIZE      (KAA_TCP_CHANNEL_OUT_BUFFER_SIZE >> 3)
+#define KAA_DEMO_MAX_LOGS_IN_BUCKET       16   /* Max count of logs in one bucket */
 #define KAA_DEMO_MAX_CLEANUP_THRESHOLD    100 /* Max size of an inner log storage. If size is exceeded, elder logs will be removed. */
 
 #define KAA_DEMO_LOG_GENERATION_FREQUENCY    3 /* seconds */
 
+_Static_assert(KAA_DEMO_MAX_LOG_BUCKET_SIZE, "Maximum bucket size cannot be 0!");
 
 /*
  * Kaa status and public key storage file names.
@@ -205,7 +208,7 @@ kaa_error_t kaa_client_stop(kaa_client_t *kaa_client)
 {
     KAA_RETURN_IF_NIL(kaa_client, KAA_ERR_BADPARAM);
     kaa_client->operate = false;
-    return KAA_ERR_NONE;
+    return kaa_stop(kaa_client->kaa_context);
 }
 
 void kaa_client_destroy(kaa_client_t *kaa_client)
@@ -349,7 +352,12 @@ kaa_error_t kaa_client_start(kaa_client_t *kaa_client
     KAA_RETURN_IF_NIL(kaa_client, KAA_ERR_BADPARAM);
     KAA_LOG_TRACE(kaa_client->kaa_context->logger, KAA_ERR_NONE, "Kaa client starting ...");
     print_mem_stat(kaa_client);
-    kaa_error_t error_code = KAA_ERR_NONE;
+
+    kaa_error_t error_code = kaa_check_readiness(kaa_client->kaa_context);
+    if (error_code != KAA_ERR_NONE) {
+        KAA_LOG_ERROR(kaa_client->kaa_context->logger, error_code, "Cannot start Kaa client: Kaa context is not fully initialized");
+        return error_code;
+    }
 
     error_code = kaa_tcp_channel_create(&kaa_client->bootstrap_channel
                                       , kaa_client->kaa_context->logger
@@ -732,9 +740,15 @@ kaa_error_t kaa_log_collector_init(kaa_client_t *kaa_client)
             return error_code;
         }
 
+        kaa_log_bucket_constraints_t bucket_sizes = {
+            .max_bucket_size = KAA_DEMO_MAX_LOG_BUCKET_SIZE,
+            .max_bucket_log_count = KAA_DEMO_MAX_LOGS_IN_BUCKET,
+        };
+
         error_code = kaa_logging_init(kaa_client->kaa_context->log_collector
                                     , kaa_client->log_storage_context
-                                    , kaa_client->log_upload_strategy_context);
+                                    , kaa_client->log_upload_strategy_context
+                                    , &bucket_sizes);
 
         if (error_code) {
             KAA_LOG_ERROR(kaa_client->kaa_context->logger,

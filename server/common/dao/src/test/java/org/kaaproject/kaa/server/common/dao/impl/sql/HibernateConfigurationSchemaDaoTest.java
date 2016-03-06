@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.server.common.dao.impl.sql;
@@ -54,7 +54,7 @@ public class HibernateConfigurationSchemaDaoTest extends HibernateAbstractTest {
         Application app = schema.getApplication();
         ConfigurationSchema found = configurationSchemaDao.findLatestByApplicationId(app.getId().toString());
         Assert.assertNotNull(found);
-        Assert.assertEquals(4, found.getMajorVersion());
+        Assert.assertEquals(4, found.getVersion());
     }
 
     @Test
@@ -63,9 +63,9 @@ public class HibernateConfigurationSchemaDaoTest extends HibernateAbstractTest {
         Assert.assertEquals(4, schemas.size());
         ConfigurationSchema schema = schemas.get(2);
         Application app = schema.getApplication();
-        ConfigurationSchema found = configurationSchemaDao.findByAppIdAndVersion(app.getId().toString(), schema.getMajorVersion());
+        ConfigurationSchema found = configurationSchemaDao.findByAppIdAndVersion(app.getId().toString(), schema.getVersion());
         Assert.assertNotNull(found);
-        Assert.assertEquals(3, found.getMajorVersion());
+        Assert.assertEquals(3, found.getVersion());
     }
 
     @Test

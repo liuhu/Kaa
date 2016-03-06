@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.server.common.dao.service;
@@ -23,8 +23,8 @@ import static org.kaaproject.kaa.server.common.dao.impl.DaoUtil.getDto;
 import static org.kaaproject.kaa.server.common.dao.service.Validator.isValidId;
 import static org.kaaproject.kaa.server.common.dao.service.Validator.validateHash;
 import static org.kaaproject.kaa.server.common.dao.service.Validator.validateId;
-import static org.kaaproject.kaa.server.common.dao.service.Validator.validateSqlId;
 import static org.kaaproject.kaa.server.common.dao.service.Validator.validateObject;
+import static org.kaaproject.kaa.server.common.dao.service.Validator.validateSqlId;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -41,8 +41,8 @@ import org.kaaproject.kaa.common.dto.EndpointNotificationDto;
 import org.kaaproject.kaa.common.dto.NotificationDto;
 import org.kaaproject.kaa.common.dto.NotificationSchemaDto;
 import org.kaaproject.kaa.common.dto.NotificationTypeDto;
-import org.kaaproject.kaa.common.dto.SchemaDto;
 import org.kaaproject.kaa.common.dto.UpdateNotificationDto;
+import org.kaaproject.kaa.common.dto.VersionDto;
 import org.kaaproject.kaa.server.common.dao.NotificationService;
 import org.kaaproject.kaa.server.common.dao.exception.DatabaseProcessingException;
 import org.kaaproject.kaa.server.common.dao.exception.IncorrectParameterException;
@@ -98,8 +98,8 @@ public class NotificationServiceImpl implements NotificationService {
                 throw new IncorrectParameterException("Invalid Notification type in Notification Schema object.");
             }
             if (foundSchema != null) {
-                int lastSchemaVersion = foundSchema.getMajorVersion();
-                notificationSchemaDto.setMajorVersion(++lastSchemaVersion);
+                int lastSchemaVersion = foundSchema.getVersion();
+                notificationSchemaDto.setVersion(++lastSchemaVersion);
             } else {
                 notificationSchemaDto.incrementVersion();
             }
@@ -126,7 +126,7 @@ public class NotificationServiceImpl implements NotificationService {
         if (isNotBlank(schemaId) && isNotBlank(topicId)) {
             NotificationSchema schema = notificationSchemaDao.findById(schemaId);
             if (schema != null) {
-                dto.setVersion(schema.getMajorVersion());
+                dto.setNfVersion(schema.getVersion());
                 dto.setApplicationId(schema.getApplicationId());
                 dto.setType(schema.getType());
             } else {
@@ -205,24 +205,24 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<SchemaDto> findUserNotificationSchemasByAppId(String applicationId) {
+    public List<VersionDto> findUserNotificationSchemasByAppId(String applicationId) {
         validateId(applicationId, "Can't find schemas. Invalid application id: " + applicationId);
         List<NotificationSchema> notificationSchemas = notificationSchemaDao.findNotificationSchemasByAppIdAndType(applicationId, NotificationTypeDto.USER);
-        List<SchemaDto> schemas = new ArrayList<>();
+        List<VersionDto> schemas = new ArrayList<>();
         for (NotificationSchema notificationSchema : notificationSchemas) {
-            schemas.add(notificationSchema.toSchemaDto());
+            schemas.add(notificationSchema.toVersionDto());
         }
         return schemas;
     }
 
     @Override
-    public List<SchemaDto> findNotificationSchemaVersionsByAppId(
+    public List<VersionDto> findNotificationSchemaVersionsByAppId(
             String applicationId) {
         validateId(applicationId, "Can't find notification schema versions. Invalid application id: " + applicationId);
         List<NotificationSchema> notificationSchemas = notificationSchemaDao.findNotificationSchemasByAppId(applicationId);
-        List<SchemaDto> schemas = new ArrayList<>();
+        List<VersionDto> schemas = new ArrayList<>();
         for (NotificationSchema notificationSchema : notificationSchemas) {
-            schemas.add(notificationSchema.toSchemaDto());
+            schemas.add(notificationSchema.toVersionDto());
         }
         return schemas;
     }
@@ -290,7 +290,7 @@ public class NotificationServiceImpl implements NotificationService {
             notificationDto.setSecNum(-1);
             NotificationSchema schema = notificationSchemaDao.findById(schemaId);
             if (schema != null) {
-                notificationDto.setVersion(schema.getMajorVersion());
+                notificationDto.setNfVersion(schema.getVersion());
                 notificationDto.setApplicationId(schema.getApplicationId());
                 notificationDto.setType(schema.getType());
                 try {

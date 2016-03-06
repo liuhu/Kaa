@@ -1,18 +1,19 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
+
 package org.kaaproject.kaa.server.common.dao.model.sql;
 
 import org.hibernate.annotations.OnDelete;
@@ -29,6 +30,7 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.CONFIGURATION_CONFIGURATION_SCHEMA_VERSION;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.CONFIGURATION_CONFIGURATION_BODY;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.CONFIGURATION_CONFIGURATION_SCHEMA_ID;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.CONFIGURATION_TABLE_NAME;
@@ -39,11 +41,14 @@ import static org.kaaproject.kaa.server.common.dao.model.sql.ModelUtils.stringTo
 @Entity
 @Table(name = CONFIGURATION_TABLE_NAME)
 @OnDelete(action = OnDeleteAction.CASCADE)
-public final class Configuration extends AbstractStructure<ConfigurationDto> implements Serializable {
+public class Configuration extends AbstractStructure<ConfigurationDto> implements Serializable {
 
     private static final long serialVersionUID = -216908432141461265L;
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
+
+    @Column(name = CONFIGURATION_CONFIGURATION_SCHEMA_VERSION)
+    protected int schemaVersion;
 
     @Lob
     @Column(name = CONFIGURATION_CONFIGURATION_BODY)
@@ -67,6 +72,7 @@ public final class Configuration extends AbstractStructure<ConfigurationDto> imp
             Long schemaId = getLongId(dto.getSchemaId());
             this.configurationSchema = schemaId != null ? new ConfigurationSchema(schemaId) : null;
             this.configurationBody = stringToBinary(dto.getBody());
+            this.schemaVersion = dto.getSchemaVersion();
         }
     }
 
@@ -96,6 +102,14 @@ public final class Configuration extends AbstractStructure<ConfigurationDto> imp
 
     public String getEndpointGroupId() {
         return endpointGroup != null ? endpointGroup.getStringId() : null;
+    }
+
+    public int getSchemaVersion() {
+        return schemaVersion;
+    }
+
+    public void setSchemaVersion(int schemaVersion) {
+        this.schemaVersion = schemaVersion;
     }
 
     @Override
@@ -141,6 +155,7 @@ public final class Configuration extends AbstractStructure<ConfigurationDto> imp
         ConfigurationDto dto = super.toDto();
         dto.setBody(binaryToString(configurationBody));
         dto.setSchemaId(ModelUtils.getStringId(configurationSchema.getId()));
+        dto.setSchemaVersion(schemaVersion);
         dto.setProtocolSchema(configurationSchema != null ? configurationSchema.getProtocolSchema() : null);
         return dto;
     }
@@ -148,6 +163,11 @@ public final class Configuration extends AbstractStructure<ConfigurationDto> imp
     @Override
     protected ConfigurationDto createDto() {
         return new ConfigurationDto();
+    }
+
+    @Override
+    protected GenericModel<ConfigurationDto> newInstance(Long id) {
+        return new Configuration(id);
     }
 
     @Override
@@ -169,8 +189,8 @@ public final class Configuration extends AbstractStructure<ConfigurationDto> imp
 
     @Override
     public String toString() {
-        return "Configuration [sequenceNumber=" + sequenceNumber + ", majorVersion="
-                + majorVersion + ", minorVersion=" + minorVersion + ", description=" + description + ", createdTime=" + createdTime + ", lastModifyTime="
+        return "Configuration [sequenceNumber=" + sequenceNumber + ", schemaVersion="
+                + schemaVersion + ", description=" + description + ", createdTime=" + createdTime + ", lastModifyTime="
                 + lastModifyTime + ", activatedTime=" + activatedTime + ", deactivatedTime=" + deactivatedTime + ", createdUsername=" + createdUsername
                 + ", modifiedUsername=" + modifiedUsername + ", activatedUsername=" + activatedUsername + ", deactivatedUsername=" + deactivatedUsername
                 + ", endpointCount=" + endpointCount + ", status=" + status + ", id=" + id + ", version=" + getVersion() + "]";

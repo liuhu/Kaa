@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.client.event.registration;
@@ -28,10 +28,8 @@ import org.kaaproject.kaa.client.event.EndpointKeyHash;
  * To assign endpoints to user current endpoint has to be already attached,
  * otherwise attach/detach operations will fail.<br>
  * Current endpoint can be attached to user in two ways:
- * <il>
- * <li>By calling {@link #attachUser(String, String, UserAttachCallback)}</li>
- * <li>Attached from another endpoint</li>
- * </il>
+ * By calling {@link #attachUser(String, String, UserAttachCallback)}
+ * Attached from another endpoint
  * <br>
  * Attaching current endpoint to user:
  * <pre>
@@ -112,9 +110,9 @@ public interface EndpointRegistrationManager {
      * Creates user attach request using default verifier. Default verifier is selected during SDK generation.
      * If there was no default verifier selected this method will throw runtime exception.
      *
-     * @param userExternalId
-     * @param userAccessToken
-     * @param callback called when authentication result received
+     * @param userExternalId    the user external id
+     * @param userAccessToken   the user access token
+     * @param callback          called when authentication result received
      *
      * @see UserAttachCallback
      */
@@ -123,10 +121,10 @@ public interface EndpointRegistrationManager {
     /**
      * Creates user attach request using specified verifier.
      *
-     * @param userVerifierToken
-     * @param userExternalId
-     * @param userAccessToken
-     * @param callback called when authentication result received
+     * @param userVerifierToken the user verifier token
+     * @param userExternalId    the user external id
+     * @param userAccessToken   the user access token
+     * @param callback          called when authentication result received
      *
      * @see UserAttachCallback
      */
@@ -142,7 +140,7 @@ public interface EndpointRegistrationManager {
     /**
      * Sets callback for notifications when current endpoint is attached to user
      *
-     * @param callback
+     * @param callback the callback
      *
      * @see AttachEndpointToUserCallback
      */
@@ -151,7 +149,7 @@ public interface EndpointRegistrationManager {
     /**
      * Sets callback for notifications when current endpoint is detached from user
      *
-     * @param callback
+     * @param callback the callback
      *
      * @see DetachEndpointFromUserCallback
      */

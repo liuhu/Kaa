@@ -1,37 +1,20 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
+
 package org.kaaproject.kaa.server.common.dao.model.sql;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.kaaproject.kaa.common.dto.AbstractStructureDto;
-import org.kaaproject.kaa.common.dto.UpdateStatus;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Version;
-import java.io.Serializable;
 
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_ACTIVATED_TIME;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_ACTIVATED_USERNAME;
@@ -44,14 +27,31 @@ import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTU
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_ENDPOINT_COUNT;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_ENDPOINT_GROUP_ID;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_LAST_MODIFY_TIME;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_MAJOR_VERSION;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_MINOR_VERSION;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_MODIFIED_USERNAME;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_OPTIMISTIC_LOCK;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_SCHEMA_VERSION;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_SEQUENCE_NUMBER;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_STATUS;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_TABLE_NAME;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.ABSTRACT_STRUCTURE_OPTIMISTIC_LOCK;
 import static org.kaaproject.kaa.server.common.dao.model.sql.ModelUtils.getLongId;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Version;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.kaaproject.kaa.common.dto.AbstractStructureDto;
+import org.kaaproject.kaa.common.dto.UpdateStatus;
 
 @Entity
 @Table(name = ABSTRACT_STRUCTURE_TABLE_NAME)
@@ -62,12 +62,6 @@ public abstract class AbstractStructure<T extends AbstractStructureDto> extends 
 
     @Column(name = ABSTRACT_STRUCTURE_SEQUENCE_NUMBER)
     protected int sequenceNumber;
-
-    @Column(name = ABSTRACT_STRUCTURE_MAJOR_VERSION)
-    protected int majorVersion;
-
-    @Column(name = ABSTRACT_STRUCTURE_MINOR_VERSION)
-    protected int minorVersion;
 
     @Column(name = ABSTRACT_STRUCTURE_DESCRIPTION)
     protected String description;
@@ -132,8 +126,6 @@ public abstract class AbstractStructure<T extends AbstractStructureDto> extends 
         if (dto != null) {
             this.id = getLongId(dto);
             this.sequenceNumber = dto.getSequenceNumber();
-            this.majorVersion = dto.getMajorVersion();
-            this.minorVersion = dto.getMinorVersion();
             this.description = dto.getDescription();
             this.createdTime = dto.getCreatedTime();
             this.lastModifyTime = dto.getLastModifyTime();
@@ -164,23 +156,7 @@ public abstract class AbstractStructure<T extends AbstractStructureDto> extends 
     public void incrementSequenceNumber() {
         sequenceNumber++;
     }
-
-    public int getMajorVersion() {
-        return majorVersion;
-    }
-
-    public void setMajorVersion(int majorVersion) {
-        this.majorVersion = majorVersion;
-    }
-
-    public int getMinorVersion() {
-        return minorVersion;
-    }
-
-    public void setMinorVersion(int minorVersion) {
-        this.minorVersion = minorVersion;
-    }
-
+    
     public String getDescription() {
         return description;
     }
@@ -296,8 +272,6 @@ public abstract class AbstractStructure<T extends AbstractStructureDto> extends 
             dto.setEndpointGroupId(endpointGroup.getStringId());
         }
         dto.setSequenceNumber(sequenceNumber);
-        dto.setMajorVersion(majorVersion);
-        dto.setMinorVersion(minorVersion);
         dto.setDescription(description);
         dto.setCreatedTime(createdTime);
         dto.setLastModifyTime(lastModifyTime);
@@ -323,8 +297,6 @@ public abstract class AbstractStructure<T extends AbstractStructureDto> extends 
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + sequenceNumber;
-        result = prime * result + majorVersion;
-        result = prime * result + minorVersion;
         result = prime * result + ((description == null) ? 0 : description.hashCode());
         result = prime * result + Long.valueOf(createdTime).hashCode();
         result = prime * result + Long.valueOf(lastModifyTime).hashCode();
@@ -362,12 +334,6 @@ public abstract class AbstractStructure<T extends AbstractStructureDto> extends 
             return false;
         }
         if (sequenceNumber != other.sequenceNumber) {
-            return false;
-        }
-        if (majorVersion != other.majorVersion) {
-            return false;
-        }
-        if (minorVersion != other.minorVersion) {
             return false;
         }
         if (description == null) {

@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.common.dto;
@@ -26,9 +26,8 @@ public class ChangeDto implements Serializable, HasId {
     private ChangeType type;
     private String endpointGroupId;
     private String profileFilterId;
-    private int pfMajorVersion;
     private String configurationId;
-    private int cfMajorVersion;
+    private int cfVersion;
     private String topicId;
 
     
@@ -64,14 +63,6 @@ public class ChangeDto implements Serializable, HasId {
         this.profileFilterId = profileFilterId;
     }
 
-    public int getPfMajorVersion() {
-        return pfMajorVersion;
-    }
-
-    public void setPfMajorVersion(int pfMajorVersion) {
-        this.pfMajorVersion = pfMajorVersion;
-    }
-
     public String getConfigurationId() {
         return configurationId;
     }
@@ -80,12 +71,12 @@ public class ChangeDto implements Serializable, HasId {
         this.configurationId = configurationId;
     }
 
-    public int getCfMajorVersion() {
-        return cfMajorVersion;
+    public int getCfVersion() {
+        return cfVersion;
     }
 
-    public void setCfMajorVersion(int cfMajorVersion) {
-        this.cfMajorVersion = cfMajorVersion;
+    public void setCfVersion(int cfVersion) {
+        this.cfVersion = cfVersion;
     }
 
     public String getTopicId() {
@@ -107,10 +98,7 @@ public class ChangeDto implements Serializable, HasId {
 
         ChangeDto changeDto = (ChangeDto) o;
 
-        if (cfMajorVersion != changeDto.cfMajorVersion) {
-            return false;
-        }
-        if (pfMajorVersion != changeDto.pfMajorVersion) {
+        if (cfVersion != changeDto.cfVersion) {
             return false;
         }
         if (configurationId != null ? !configurationId.equals(changeDto.configurationId) : changeDto.configurationId != null) {
@@ -137,9 +125,8 @@ public class ChangeDto implements Serializable, HasId {
         int result = type != null ? type.hashCode() : 0;
         result = 31 * result + (endpointGroupId != null ? endpointGroupId.hashCode() : 0);
         result = 31 * result + (profileFilterId != null ? profileFilterId.hashCode() : 0);
-        result = 31 * result + pfMajorVersion;
         result = 31 * result + (configurationId != null ? configurationId.hashCode() : 0);
-        result = 31 * result + cfMajorVersion;
+        result = 31 * result + cfVersion;
         result = 31 * result + (topicId != null ? topicId.hashCode() : 0);
         return result;
     }
@@ -151,9 +138,8 @@ public class ChangeDto implements Serializable, HasId {
                 "type=" + type +
                 ", endpointGroupId='" + endpointGroupId + '\'' +
                 ", profileFilterId='" + profileFilterId + '\'' +
-                ", pfMajorVersion=" + pfMajorVersion +
                 ", configurationId='" + configurationId + '\'' +
-                ", cfMajorVersion=" + cfMajorVersion +
+                ", cfVersion=" + cfVersion +
                 ", topicId='" + topicId + '\'' +
                 '}';
     }

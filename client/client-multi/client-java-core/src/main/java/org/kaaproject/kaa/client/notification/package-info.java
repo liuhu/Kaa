@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 /**
@@ -28,7 +28,7 @@
  *
  *  <h3>Topics - usage examples</h3>
  *
- *  <h5>Access to available topics</h5>
+ *  <h3>Access to available topics</h3>
  *  <pre>
  *  {@code
  *  KaaDesktop kaa = new KaaDesktop();
@@ -46,7 +46,7 @@
  *  }
  *  </pre>
  *
- *  <h5>Topic update subscription</h5>
+ *  <h3>Topic update subscription</h3>
  *
  *  <p>If there is need to know about topic list updates, do following
  *  ({@link org.kaaproject.kaa.client.notification.NotificationTopicListListener}):</p>
@@ -94,7 +94,7 @@
  *  <p>As mentioned earlier, there is two kind of topics - mandatory and
  *  optional. Further it will be discussed dealing with both of them.</p>
  *
- *  <h5>Notification listener(s) for all topics</h5>
+ *  <h3>Notification listener(s) for all topics</h3>
  *
  *  <p>Below is an example of receiving notifications relating to all topics
  *  irrespective whether it is mandatory or optional:</p>
@@ -127,7 +127,7 @@
  *  }
  *  </pre>
  *
- *  <h5>Notification listener(s) for a specified topic</h5>
+ *  <h3>Notification listener(s) for a specified topic</h3>
  *
  *  <p>To add/remove listener(s) to receive notifications relating to
  *  the specified topic, do following</p>
@@ -147,7 +147,7 @@
  *  }
  *  </pre>
  *
- *  <h5>Optional topic (un)subscription</h5>
+ *  <h3>Optional topic (un)subscription</h3>
  *
  *  <p>To receive notifications relating to some optional topic, firstly you
  *  should to subscribe to this topic:</p>
@@ -171,7 +171,7 @@
  *  {@link org.kaaproject.kaa.client.notification.NotificationManager#subscribeToTopics(java.util.List, boolean)} and
  *  {@link org.kaaproject.kaa.client.notification.NotificationManager#unsubscribeFromTopics(java.util.List, boolean)}.</p>
  *
- *  <h6>Performance</h6>
+ *  <h3>Performance</h3>
  *
  *  <p>To increase Kaa performance in case of several subsequent subscription
  *  changes and avoid possible race conditions, we recommend to use following
@@ -191,7 +191,6 @@
  *  </pre>
  *
  *  @see org.kaaproject.kaa.client.notification.NotificationManager
- *  @see org.kaaproject.kaa.client.notification.AbstractNotificationListener
  *  @see org.kaaproject.kaa.client.notification.NotificationTopicListListener
  *
  */

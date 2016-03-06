@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.server.common.dao.impl;
@@ -32,7 +32,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
@@ -89,6 +91,24 @@ public abstract class DaoUtil {
             }
         }
         return list;
+    }
+
+    /**
+     * This method  convert list of model objects to dto objects.
+     *
+     * @param <T>       Type of model object
+     * @param toDtoSet List of model objects.
+     * @return List of converted objects.
+     */
+    public static <T> Set<T> convertDtoSet(Collection<? extends ToDto<T>> toDtoSet) {
+        Set<T> set = Collections.emptySet();
+        if (toDtoSet != null && !toDtoSet.isEmpty()) {
+            set = new HashSet<>();
+            for (ToDto<T> object : toDtoSet) {
+                set.add(object.toDto());
+            }
+        }
+        return set;
     }
 
     /**

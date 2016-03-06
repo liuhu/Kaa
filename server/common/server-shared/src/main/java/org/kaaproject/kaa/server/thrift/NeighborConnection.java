@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.server.thrift;
@@ -30,11 +30,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.thrift.TException;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.protocol.TMultiplexedProtocol;
+import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.transport.TTransport;
+import org.kaaproject.kaa.server.common.thrift.KaaThriftService;
 import org.kaaproject.kaa.server.common.thrift.gen.operations.OperationsThriftService;
+import org.kaaproject.kaa.server.common.thrift.gen.operations.OperationsThriftService.Iface;
 import org.kaaproject.kaa.server.common.zk.gen.ConnectionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Function;
 import com.twitter.common.quantity.Amount;
 import com.twitter.common.quantity.Time;
 import com.twitter.common.thrift.Thrift;
@@ -178,7 +185,14 @@ public final class NeighborConnection<T extends NeighborTemplate<V>, V> {
             Set<InetSocketAddress> backends = new HashSet<InetSocketAddress>();
             backends.add(address);
             thrift = clientFactory.withMaxConnectionsPerEndpoint(maxNumberConnection)
-                    .withSocketTimeout(Amount.of(socketTimeout, Time.SECONDS)).build(backends);
+                    .withSocketTimeout(Amount.of(socketTimeout, Time.SECONDS)).
+                    withClientFactory(new Function<TTransport, OperationsThriftService.Iface>(){
+                        @Override
+                        public Iface apply(TTransport transport) {
+                            TProtocol protocol = new TBinaryProtocol(transport);
+                            TMultiplexedProtocol mprotocol = new TMultiplexedProtocol(protocol, KaaThriftService.OPERATIONS_SERVICE.getServiceName());
+                            return new OperationsThriftService.Client(mprotocol);
+                        }}).build(backends);
             for (int i = 0; i < maxNumberConnection; i++) {
                 EventWorker worker = new EventWorker(template);
                 workers.add(executor.submit(worker));
@@ -197,7 +211,7 @@ public final class NeighborConnection<T extends NeighborTemplate<V>, V> {
             cancelWorkers();
             executor.shutdown();
             try {
-                executor.awaitTermination(1, TimeUnit.MINUTES);
+                executor.awaitTermination(1, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 LOG.error("Neighbor Connection {} error terminates ExecutorService", getId(), e);
             }

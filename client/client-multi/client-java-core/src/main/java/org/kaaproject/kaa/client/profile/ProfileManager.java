@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.client.profile;
@@ -20,9 +20,6 @@ import java.io.IOException;
 
 /**
  * <p>Interface for the profile manager.</p>
- *
- * <p>Responsible for the management of the user-defined profile container
- * ({@link AbstractProfileContainer})</p>
  *
  * <p>Profile manager is used to track any profile updates.
  * If no container is set, Kaa won't be able to process these updates.</p>
@@ -61,8 +58,6 @@ import java.io.IOException;
  * @author Yaroslav Zeygerman
  * @author Andrew Shvayka
  *
- * @see AbstractProfileContainer
- * @see SerializedProfileContainer
  */
 public interface ProfileManager {
 
@@ -70,7 +65,6 @@ public interface ProfileManager {
      * Sets profile container implemented by the user.
      *
      * @param container User-defined container
-     * @see AbstractProfileContainer
      *
      */
     void setProfileContainer(ProfileContainer container);
@@ -79,12 +73,22 @@ public interface ProfileManager {
      * Retrieves serialized profile
      *
      * @return serialized profile data
+     * @throws IOException the io exception
      *
      */
     byte[] getSerializedProfile() throws IOException;
-    
+
     /**
      * Force sync of updated profile with server
      */
     void updateProfile();
+
+    /**
+     * Retrieves ready-to-use state.
+     *
+     * A user should provide a profile container in case of a non-default profile schema.
+     *
+     * @return True if ready.
+     */
+    boolean isInitialized();
 }

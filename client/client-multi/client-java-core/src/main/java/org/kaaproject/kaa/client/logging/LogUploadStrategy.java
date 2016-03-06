@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.client.logging;
@@ -45,20 +45,6 @@ public interface LogUploadStrategy {
     LogUploadStrategyDecision isUploadNeeded(LogStorageStatus status);
 
     /**
-     * Retrieves maximum size of the report pack 
-     * that will be delivered in single request to server 
-     * @return size of the batch
-     */
-    long getBatchSize();
-
-    /**
-     * Retrieves maximum count of the records in report pack 
-     * that will be delivered in single request to server 
-     * @return size of the batch
-     */
-    int getBatchCount();
-
-    /**
      * Maximum time to wait log delivery response.
      *
      * @return Time in seconds.
@@ -82,13 +68,14 @@ public interface LogUploadStrategy {
 
     /**
      * Handles timeout of log delivery
-     * @param controller
+     * @param controller the controller
      */
     void onTimeout(LogFailoverCommand controller);
 
     /**
      * Handles failure of log delivery
-     * @param controller
+     * @param controller the controller
+     * @param code the code
      */
     void onFailure(LogFailoverCommand controller, LogDeliveryErrorCode code);
 }

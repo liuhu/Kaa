@@ -1,48 +1,46 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
+
 package org.kaaproject.kaa.server.common.dao.model.sql;
 
-import org.kaaproject.kaa.common.dto.ChangeDto;
-import org.kaaproject.kaa.common.dto.ChangeType;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_CONFIGURATION_ID;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_CONFIGURATION_VERSION;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_ENDPOINT_GROUP_ID;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_PROFILE_FILTER_ID;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_TABLE_NAME;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_TOPIC_ID;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_TYPE;
+import static org.kaaproject.kaa.server.common.dao.model.sql.ModelUtils.getLongId;
+
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
-import java.io.Serializable;
 
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_CONFIGURATION_ID;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_CONFIGURATION_VERSION;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_ENDPOINT_GROUP_ID;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_PROFILE_FILTER_ID;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_PROFILE_FILTER_VERSION;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_TABLE_NAME;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_TOPIC_ID;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.CHANGE_TYPE;
-import static org.kaaproject.kaa.server.common.dao.model.sql.ModelUtils.getLongId;
+import org.kaaproject.kaa.common.dto.ChangeDto;
+import org.kaaproject.kaa.common.dto.ChangeType;
 
 @Entity
 @Table(name = CHANGE_TABLE_NAME)
-public final class Change extends GenericModel<ChangeDto> implements Serializable {
+public class Change extends GenericModel<ChangeDto> implements Serializable {
 
     private static final long serialVersionUID = 8527934746035638165L;
-
-    @Column(name = CHANGE_PROFILE_FILTER_VERSION)
-    private int filterVersion;
 
     @Column(name = CHANGE_CONFIGURATION_VERSION)
     private int configurationVersion;
@@ -74,21 +72,12 @@ public final class Change extends GenericModel<ChangeDto> implements Serializabl
         if (dto != null) {
             this.id = getLongId(dto.getId());
             this.type = dto.getType();
-            this.filterVersion = dto.getPfMajorVersion();
-            this.configurationVersion = dto.getCfMajorVersion();
+            this.configurationVersion = dto.getCfVersion();
             this.groupId = getLongId(dto.getEndpointGroupId());
             this.profileFilterId = getLongId(dto.getProfileFilterId());
             this.configurationId = getLongId(dto.getConfigurationId());
             this.topicId = getLongId(dto.getTopicId());
         }
-    }
-
-    public int getFilterVersion() {
-        return filterVersion;
-    }
-
-    public void setFilterVersion(int filterVersion) {
-        this.filterVersion = filterVersion;
     }
 
     public int getConfigurationVersion() {
@@ -144,7 +133,6 @@ public final class Change extends GenericModel<ChangeDto> implements Serializabl
         final int prime = 89;
         int result = 3;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + filterVersion;
         result = prime * result + configurationVersion;
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         result = prime * result + ((groupId == null) ? 0 : groupId.hashCode());
@@ -171,9 +159,6 @@ public final class Change extends GenericModel<ChangeDto> implements Serializabl
                 return false;
             }
         } else if (!id.equals(other.id)) {
-            return false;
-        }
-        if (this.filterVersion != other.filterVersion) {
             return false;
         }
         if (this.configurationVersion != other.configurationVersion) {
@@ -219,22 +204,26 @@ public final class Change extends GenericModel<ChangeDto> implements Serializabl
     }
 
     @Override
+    protected GenericModel<ChangeDto> newInstance(Long id) {
+        return new Change(id);
+    }
+
+    @Override
     public ChangeDto toDto() {
         ChangeDto changeDto = createDto();
         changeDto.setId(getStringId());
         changeDto.setType(type);
         changeDto.setConfigurationId(ModelUtils.getStringId(configurationId));
-        changeDto.setCfMajorVersion(configurationVersion);
+        changeDto.setCfVersion(configurationVersion);
         changeDto.setEndpointGroupId(ModelUtils.getStringId(groupId));
         changeDto.setProfileFilterId(ModelUtils.getStringId(profileFilterId));
-        changeDto.setPfMajorVersion(filterVersion);
         changeDto.setTopicId(ModelUtils.getStringId(topicId));
         return changeDto;
     }
 
     @Override
     public String toString() {
-        return "Change [filterVersion=" + filterVersion + ", configurationVersion=" + configurationVersion + ", type=" + type + ", groupId=" + groupId
+        return "Change [configurationVersion=" + configurationVersion + ", type=" + type + ", groupId=" + groupId
                 + ", topicId=" + topicId + ", configurationId=" + configurationId + ", profileFilterId=" + profileFilterId + "]";
     }
 

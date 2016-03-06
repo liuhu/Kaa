@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.server.common.dao.service;
@@ -35,7 +35,7 @@ public class LogAppenderServiceImplTest extends AbstractTest {
 
     @Before
     public void beforeTest() {
-        application = generateApplication();
+        application = generateApplicationDto();
     }
 
     @After
@@ -45,9 +45,9 @@ public class LogAppenderServiceImplTest extends AbstractTest {
 
     @Test
     public void findAllAppendersByAppIdTest() {
-        LogAppenderDto logAppender1 = generateLogAppender(application.getId(), null);
+        LogAppenderDto logAppender1 = generateLogAppenderDto(application.getId(), null);
         Assert.assertNotNull(logAppender1);
-        LogAppenderDto logAppender2 = generateLogAppender(application.getId(), null);
+        LogAppenderDto logAppender2 = generateLogAppenderDto(application.getId(), null);
         Assert.assertNotNull(logAppender2);
         List<LogAppenderDto> appenders = logAppendersService.findAllAppendersByAppId(application.getId());
         Assert.assertNotNull(appenders);
@@ -56,7 +56,7 @@ public class LogAppenderServiceImplTest extends AbstractTest {
 
     @Test
     public void findLogAppenderByIdTest() {
-        LogAppenderDto appender = generateLogAppender(application.getId(), null);
+        LogAppenderDto appender = generateLogAppenderDto(application.getId(), null);
         LogAppenderDto found = logAppendersService.findLogAppenderById(appender.getId());
         Assert.assertNotNull(found);
         Assert.assertEquals(appender, found);
@@ -65,7 +65,7 @@ public class LogAppenderServiceImplTest extends AbstractTest {
 
     @Test
     public void removeLogAppenderByIdTest() {
-        LogAppenderDto appender = generateLogAppender(application.getId(), null);
+        LogAppenderDto appender = generateLogAppenderDto(application.getId(), null);
         LogAppenderDto found = logAppendersService.findLogAppenderById(appender.getId());
         Assert.assertNotNull(found);
         Assert.assertEquals(appender, found);

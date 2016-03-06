@@ -1,5 +1,5 @@
 <!--
-  Copyright 2014 CyberVision, Inc.
+  Copyright 2014-2016 CyberVision, Inc.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.kaaproject.kaa.server</groupId>
-        <version>0.7.4-SNAPSHOT</version>
+        <version>0.8.0</version>
         <artifactId>common</artifactId>
     </parent>
     <groupId>org.kaaproject.kaa.server.common</groupId>
@@ -84,6 +84,10 @@
             <artifactId>spring-aop</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
+        </dependency>     
+        <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
         </dependency>
@@ -128,13 +132,8 @@
             <artifactId>hibernate-entitymanager</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
@@ -145,31 +144,39 @@
             <artifactId>commons-pool</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.avro</groupId>
             <artifactId>avro</artifactId>
         </dependency>
     </dependencies>
 
     <build>
-         <resources>
-             <resource>
+        <resources>
+            <resource>
                 <directory>src/main/resources</directory>
-             </resource>
-             <resource>
-                 <directory>../../../common/endpoint-shared/src/main/avro</directory>
-                 <includes>
-                     <include>default_profile_schema.avsc</include>
-                     <include>default_notification_schema.avsc</include>
-                     <include>default_configuration_schema.avsc</include>
-                     <include>default_log_schema.avsc</include>
-                 </includes>
-             </resource>
+            </resource>
+            <resource>
+                <directory>../../../common/endpoint-shared/src/main/avro</directory>
+                <includes>
+                    <include>default_system_empty_schema.avsc</include>
+                    <include>default_notification_schema.avsc</include>
+                    <include>default_configuration_schema.avsc</include>
+                    <include>default_log_schema.avsc</include>
+                </includes>
+            </resource>
         </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
                 <configuration>
                     <systemPropertyVariables>
                         <server_log_dir>./logs</server_log_dir>
@@ -213,6 +220,23 @@
 
     <profiles>
         <profile>
+            <id>license</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mycila.maven-license-plugin</groupId>
+                        <artifactId>maven-license-plugin</artifactId>
+                        <version>1.8.0</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/*.template</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>mongo-dao</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -234,7 +258,7 @@
                                         <copy file="src/main/resources/dao.properties.template"
                                               tofile="src/main/resources/dao.properties" overwrite="true"/>
                                         <replace file="src/main/resources/dao.properties"
-                                                 token="#nosql_provider_name#" value="mongodb" />
+                                                 token="#nosql_provider_name#" value="mongodb"/>
                                     </tasks>
                                 </configuration>
                             </execution>
@@ -262,7 +286,7 @@
                                         <copy file="src/main/resources/dao.properties.template"
                                               tofile="src/main/resources/dao.properties" overwrite="true"/>
                                         <replace file="src/main/resources/dao.properties"
-                                                 token="#nosql_provider_name#" value="cassandra" />
+                                                 token="#nosql_provider_name#" value="cassandra"/>
                                     </tasks>
                                 </configuration>
                             </execution>

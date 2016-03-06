@@ -1,17 +1,17 @@
-/*
- * Copyright 2014-2015 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 #include <string.h>
@@ -116,7 +116,7 @@ void test_deserializing(void)
     kaa_notification_t *notification = kaa_notification_notification_create();
     const char *message = "Hello World!!!\n";
     notification->message = kaa_string_copy_create(message);
-    size                  =               (sizeof(uint32_t) + sizeof(uint16_t) + sizeof(uint16_t) /*that was header*/+ sizeof(uint8_t) + sizeof(uint8_t) + sizeof(uint16_t) + sizeof(uint32_t) /*extension options
+    size                  =               (sizeof(uint32_t) + sizeof(uint16_t) + sizeof(uint16_t) /*that was header*/+ sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint32_t) /*extension options
                                           and payload length*/  + sizeof(uint32_t) + sizeof(uint32_t) /*state sqn and delta status*/ + sizeof(uint16_t) + sizeof(uint16_t) /*field id and topic count*/ + sizeof(uint64_t) /*topic ID*/
                                           + sizeof(uint16_t) + sizeof(uint16_t) /*subscriptions type + topic name length*/ + sizeof(uint32_t) /*topic name + padding */ + sizeof(uint16_t) + sizeof(uint16_t) /*field id and notifications count*/
                                           + sizeof(uint32_t) /* Notification sqn */ + sizeof(uint16_t) + sizeof(uint16_t) /* Notification type + uid length */+ sizeof (uint32_t) /* notification body size*/ + sizeof (uint64_t) /*Topic Id*/
@@ -133,18 +133,16 @@ void test_deserializing(void)
     *(uint16_t *)unserialized_buffer = KAA_HTONS((uint16_t)1); // extension count
     unserialized_buffer += sizeof(uint16_t);
 
-    *(uint8_t *)unserialized_buffer = (uint8_t)KAA_NOTIFICATION_EXTENSION_TYPE;
-    unserialized_buffer += sizeof(uint8_t);
-    unserialized_buffer += sizeof(uint8_t) + sizeof(uint16_t); // pass by extension options
+    *(uint16_t *)unserialized_buffer = KAA_HTONS((uint16_t)KAA_NOTIFICATION_EXTENSION_TYPE);
+    unserialized_buffer += sizeof(uint16_t);
+    unserialized_buffer += sizeof(uint16_t); // pass by extension options
 
-    uint32_t payload_info = sizeof(uint32_t) + sizeof(uint32_t) /*state sqn and delta status*/ + sizeof(uint16_t) + sizeof(uint16_t) /*field id and topic count*/ + sizeof(uint64_t) /*topic ID*/
+    uint32_t payload_info = sizeof(uint32_t) /*delta status*/ + sizeof(uint16_t) + sizeof(uint16_t) /*field id and topic count*/ + sizeof(uint64_t) /*topic ID*/
                                                   + sizeof(uint16_t) + sizeof(uint16_t) /*subscriptions type + topic name length*/ + sizeof(uint32_t) /*topic name + padding */ + sizeof(uint16_t) + sizeof(uint16_t) /*field id and notifications count*/
                                                   + sizeof(uint32_t) /* Notification sqn */ + sizeof(uint16_t) + sizeof(uint16_t) /* Notification type + uid length */+ sizeof (uint32_t) /* notification body size*/ + sizeof (uint64_t) /*Topic Id*/
                                                   +   kaa_aligned_size_get(notification->get_size(notification));
 
     *(uint32_t *)unserialized_buffer = KAA_HTONL((uint32_t) payload_info);
-    unserialized_buffer += sizeof(uint32_t);
-    *(uint32_t *)unserialized_buffer = KAA_HTONL((uint32_t)455); //Notification sqn
     unserialized_buffer += sizeof(uint32_t);
     *(uint32_t *)unserialized_buffer = KAA_HTONL((uint32_t)2); // Delta status
     unserialized_buffer += sizeof(uint32_t);

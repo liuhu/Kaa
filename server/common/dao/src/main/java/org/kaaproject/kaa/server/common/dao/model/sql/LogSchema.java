@@ -1,3 +1,19 @@
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 /*
 ``` * Copyright 2014 CyberVision, Inc.
  *
@@ -27,7 +43,7 @@ import static org.kaaproject.kaa.server.common.dao.DaoConstants.LOG_SCHEMA_TABLE
 @Entity
 @Table(name = LOG_SCHEMA_TABLE_NAME)
 @OnDelete(action = OnDeleteAction.CASCADE)
-public final class LogSchema extends Schema<LogSchemaDto> {
+public class LogSchema extends Schema<LogSchemaDto> {
 
     private static final long serialVersionUID = 5801830095239766386L;
 
@@ -51,6 +67,11 @@ public final class LogSchema extends Schema<LogSchemaDto> {
     @Override
     protected LogSchemaDto createDto() {
         return new LogSchemaDto();
+    }
+
+    @Override
+    protected GenericModel<LogSchemaDto> newInstance(Long id) {
+        return new LogSchema(id);
     }
 
 }

@@ -1,18 +1,19 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
+
 package org.kaaproject.kaa.server.common.dao.model.sql;
 
 import org.kaaproject.kaa.common.dto.event.EventSchemaVersionDto;
@@ -31,7 +32,7 @@ import static org.kaaproject.kaa.server.common.dao.model.sql.ModelUtils.getLongI
 
 @Entity
 @Table(name = EVENT_SCHEMA_VERSION_TABLE_NAME)
-public final class EventSchemaVersion extends GenericModel<EventSchemaVersionDto> {
+public class EventSchemaVersion extends GenericModel<EventSchemaVersionDto> {
 
     private static final long serialVersionUID = -7490111487256831990L;
 
@@ -57,6 +58,10 @@ public final class EventSchemaVersion extends GenericModel<EventSchemaVersionDto
         this.version = dto.getVersion();
         this.createdUsername = dto.getCreatedUsername();
         this.createdTime = dto.getCreatedTime();
+    }
+
+    public EventSchemaVersion(Long id) {
+        this.id = id;
     }
 
     public String getSchema() {
@@ -146,6 +151,11 @@ public final class EventSchemaVersion extends GenericModel<EventSchemaVersionDto
     @Override
     protected EventSchemaVersionDto createDto() {
         return new EventSchemaVersionDto();
+    }
+
+    @Override
+    protected GenericModel<EventSchemaVersionDto> newInstance(Long id) {
+        return new EventSchemaVersion(id);
     }
 
     @Override

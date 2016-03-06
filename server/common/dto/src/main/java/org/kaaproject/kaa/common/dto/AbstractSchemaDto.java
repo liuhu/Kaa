@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.common.dto;
@@ -21,7 +21,7 @@ import org.kaaproject.avro.ui.shared.RecordField;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties({"schemaForm"})
-public abstract class AbstractSchemaDto extends SchemaDto {
+public abstract class AbstractSchemaDto extends VersionDto {
 
     private static final long serialVersionUID = 6821310997907855007L;
 
@@ -114,10 +114,7 @@ public abstract class AbstractSchemaDto extends SchemaDto {
 
         AbstractSchemaDto that = (AbstractSchemaDto) o;
 
-        if (majorVersion != that.majorVersion) {
-            return false;
-        }
-        if (minorVersion != that.minorVersion) {
+        if (version != that.version) {
             return false;
         }
         if (applicationId != null ? !applicationId.equals(that.applicationId) : that.applicationId != null) {
@@ -133,8 +130,7 @@ public abstract class AbstractSchemaDto extends SchemaDto {
     @Override
     public int hashCode() {
         int result = applicationId != null ? applicationId.hashCode() : 0;
-        result = 31 * result + majorVersion;
-        result = 31 * result + minorVersion;
+        result = 31 * result + version;
         result = 31 * result + (schema != null ? schema.hashCode() : 0);
         return result;
     }
@@ -142,8 +138,7 @@ public abstract class AbstractSchemaDto extends SchemaDto {
     @Override
     public String toString() {
         return "AbstractSchemaDto [id=" + id + ", applicationId="
-                + applicationId + ", majorVersion=" + majorVersion
-                + ", minorVersion=" + minorVersion
+                + applicationId + ", version=" + version
                 + ", name=" + name + ", description=" + description
                 + ", createdUsername=" + createdUsername + ", createdTime="
                 + createdTime + ", endpointCount=" + endpointCount + "]";

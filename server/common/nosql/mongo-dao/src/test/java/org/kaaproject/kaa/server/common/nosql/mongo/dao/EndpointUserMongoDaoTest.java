@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.server.common.nosql.mongo.dao;
@@ -60,11 +60,6 @@ public class EndpointUserMongoDaoTest extends AbstractTest {
         MongoDBTestRunner.tearDown();
     }
 
-    @Before
-    public void beforeTest() throws IOException {
-        MongoDataLoader.loadData();
-    }
-
     @After
     public void afterTest() {
         MongoDataLoader.clearDBData();
@@ -72,8 +67,8 @@ public class EndpointUserMongoDaoTest extends AbstractTest {
 
     @Test
     public void findById() {
-        TenantDto tenant = generateTenant();
-        EndpointUserDto dto = generateEndpointUser(tenant.getId());
+        TenantDto tenant = generateTenantDto();
+        EndpointUserDto dto = generateEndpointUserDto(tenant.getId());
         MongoEndpointUser user = endpointUserDao.findById(dto.getId());
         Assert.assertNotNull(user);
         Assert.assertEquals(dto, user.toDto());
@@ -81,8 +76,8 @@ public class EndpointUserMongoDaoTest extends AbstractTest {
 
     @Test
     public void removeById() {
-        TenantDto tenant = generateTenant();
-        EndpointUserDto dto = generateEndpointUser(tenant.getId());
+        TenantDto tenant = generateTenantDto();
+        EndpointUserDto dto = generateEndpointUserDto(tenant.getId());
         MongoEndpointUser user = endpointUserDao.findById(dto.getId());
         Assert.assertNotNull(user);
 
@@ -93,8 +88,8 @@ public class EndpointUserMongoDaoTest extends AbstractTest {
 
     @Test
     public void findByExternalIdTest() {
-        TenantDto tenant = generateTenant();
-        EndpointUserDto dto = generateEndpointUser(tenant.getId());
+        TenantDto tenant = generateTenantDto();
+        EndpointUserDto dto = generateEndpointUserDto(tenant.getId());
         Assert.assertNotNull(dto);
         MongoEndpointUser foundUser = endpointUserDao.findById(dto.getId());
         Assert.assertNotNull(foundUser);
@@ -104,8 +99,8 @@ public class EndpointUserMongoDaoTest extends AbstractTest {
 
     @Test
     public void removeByExternalIdTest() {
-        TenantDto tenant = generateTenant();
-        EndpointUserDto dto = generateEndpointUser(tenant.getId());
+        TenantDto tenant = generateTenantDto();
+        EndpointUserDto dto = generateEndpointUserDto(tenant.getId());
         Assert.assertNotNull(dto);
         MongoEndpointUser found = endpointUserDao.findById(dto.getId());
         Assert.assertNotNull(found);
@@ -116,8 +111,8 @@ public class EndpointUserMongoDaoTest extends AbstractTest {
 
     @Test
     public void generateAccessTokenTest() {
-        TenantDto tenant = generateTenant();
-        EndpointUserDto dto = generateEndpointUser(tenant.getId());
+        TenantDto tenant = generateTenantDto();
+        EndpointUserDto dto = generateEndpointUserDto(tenant.getId());
         Assert.assertNotNull(dto);
         String accessToken = endpointUserDao.generateAccessToken(dto.getExternalId(), dto.getTenantId().toString());
         MongoEndpointUser found = endpointUserDao.findById(dto.getId());
@@ -128,8 +123,8 @@ public class EndpointUserMongoDaoTest extends AbstractTest {
 
     @Test
     public void convertToDtoTest() {
-        TenantDto tenant = generateTenant();
-        EndpointUserDto dto = generateEndpointUser(tenant.getId());
+        TenantDto tenant = generateTenantDto();
+        EndpointUserDto dto = generateEndpointUserDto(tenant.getId());
         Assert.assertNotNull(dto);
         MongoEndpointUser user = endpointUserDao.findById(dto.getId());
         Assert.assertNotNull(user);

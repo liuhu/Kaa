@@ -1,18 +1,19 @@
-/*
- * Copyright 2014-2015 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
+
 package org.kaaproject.kaa.client;
 
 import java.io.ByteArrayInputStream;
@@ -45,6 +46,7 @@ import org.kaaproject.kaa.client.logging.AbstractLogCollector;
 import org.kaaproject.kaa.client.persistence.KaaClientPropertiesState;
 import org.kaaproject.kaa.client.persistence.KaaClientState;
 import org.kaaproject.kaa.client.persistence.PersistentStorage;
+import org.kaaproject.kaa.client.profile.ProfileContainer;
 import org.kaaproject.kaa.client.profile.ProfileRuntimeException;
 import org.kaaproject.kaa.client.schema.SchemaRuntimeException;
 import org.kaaproject.kaa.client.transport.TransportException;
@@ -52,6 +54,7 @@ import org.kaaproject.kaa.client.util.CommonsBase64;
 import org.kaaproject.kaa.common.endpoint.gen.ProtocolMetaData;
 import org.kaaproject.kaa.common.endpoint.gen.ProtocolVersionPair;
 import org.kaaproject.kaa.common.endpoint.security.KeyUtil;
+import org.kaaproject.kaa.schema.system.EmptyData;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -90,6 +93,13 @@ public class KaaClientTest {
                 return bsManagerMock;
             }
         };
+
+        client.setProfileContainer(new ProfileContainer() {
+            @Override
+            public EmptyData getProfile() {
+                return new EmptyData();
+            }
+        });
     }
 
     @Test
@@ -176,6 +186,10 @@ public class KaaClientTest {
     @Test
     public void failureOnResumeTest() {
         client.start();
+        Mockito.verify(stateListener, Mockito.timeout(1000)).onStarted();
+        client.pause();
+        Mockito.verify(stateListener, Mockito.timeout(1000)).onPaused();
+
         KaaInternalChannelManager channelManager = Mockito.mock(KaaInternalChannelManager.class);
         Mockito.doThrow(new RuntimeException()).when(channelManager).resume();
         ReflectionTestUtils.setField(client, "channelManager", channelManager);

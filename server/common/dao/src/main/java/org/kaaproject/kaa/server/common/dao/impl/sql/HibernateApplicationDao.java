@@ -1,18 +1,19 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
+
 package org.kaaproject.kaa.server.common.dao.impl.sql;
 
 import org.hibernate.criterion.Restrictions;
@@ -85,11 +86,10 @@ public class HibernateApplicationDao extends HibernateAbstractDao<Application> i
                 Restrictions.and(
                         Restrictions.eq(TENANT_REFERENCE, Long.valueOf(tenantId)),
                         Restrictions.eq(APPLICATION_NAME_PROPERTY, name)));
-        LOG.debug("Found application {} by tenant id [{}] and name [{}]", application, tenantId, name);
         if (LOG.isTraceEnabled()) {
             LOG.trace("[{},{}] Search result: {}.", name, tenantId, application);
         } else {
-            LOG.trace("[{},{}] Search result: {}.", name, tenantId, application != null);
+            LOG.debug("[{},{}] Search result: {}.", name, tenantId, application != null);
         }
         return application;
     }

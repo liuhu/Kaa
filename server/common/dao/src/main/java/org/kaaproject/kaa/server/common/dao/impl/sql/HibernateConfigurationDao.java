@@ -1,18 +1,19 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
+
 package org.kaaproject.kaa.server.common.dao.impl.sql;
 
 import org.hibernate.Criteria;
@@ -40,7 +41,7 @@ import static org.kaaproject.kaa.server.common.dao.DaoConstants.CONFIGURATION_SC
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ENDPOINT_GROUP_ALIAS;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ENDPOINT_GROUP_PROPERTY;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ENDPOINT_GROUP_REFERENCE;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.MAJOR_VERSION_PROPERTY;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.SCHEMA_VERSION_PROPERTY;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.SEQUENCE_NUMBER_PROPERTY;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.STATUS_PROPERTY;
 
@@ -52,11 +53,11 @@ public class HibernateConfigurationDao extends HibernateAbstractDao<Configuratio
     @Override
     public Configuration findConfigurationByAppIdAndVersion(String appId, int version) {
         Configuration configuration = null;
-        LOG.debug("Searching configuration by application id [{}] and major version [{}]", appId, version);
+        LOG.debug("Searching configuration by application id [{}] and schema version [{}]", appId, version);
         if (isNotBlank(appId)) {
             configuration = findOneByCriterionWithAlias(APPLICATION_PROPERTY, APPLICATION_ALIAS, Restrictions.and(
                     Restrictions.eq(APPLICATION_REFERENCE, Long.valueOf(appId)),
-                    Restrictions.eq(MAJOR_VERSION_PROPERTY, version),
+                    Restrictions.eq(SCHEMA_VERSION_PROPERTY, version),
                     Restrictions.eq(STATUS_PROPERTY, UpdateStatus.ACTIVE)));
         }
         if (LOG.isTraceEnabled()) {
@@ -70,12 +71,12 @@ public class HibernateConfigurationDao extends HibernateAbstractDao<Configuratio
     @Override
     public Configuration findConfigurationByEndpointGroupIdAndVersion(String groupId, int version) {
         Configuration configuration = null;
-        LOG.debug("Searching configuration by endpoint group id [{}] and major version [{}]", groupId, version);
+        LOG.debug("Searching configuration by endpoint group id [{}] and schema version [{}]", groupId, version);
         if (isNotBlank(groupId)) {
             configuration = findOneByCriterionWithAlias(ENDPOINT_GROUP_PROPERTY, ENDPOINT_GROUP_ALIAS,
                     Restrictions.and(
                             Restrictions.eq(ENDPOINT_GROUP_REFERENCE, Long.valueOf(groupId)),
-                            Restrictions.eq(MAJOR_VERSION_PROPERTY, version),
+                            Restrictions.eq(SCHEMA_VERSION_PROPERTY, version),
                             Restrictions.eq(STATUS_PROPERTY, UpdateStatus.ACTIVE)));
         }
         if (LOG.isTraceEnabled()) {

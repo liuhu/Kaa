@@ -1,17 +1,17 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
 
 package org.kaaproject.kaa.server.common.dao;
@@ -22,9 +22,10 @@ import java.util.List;
 
 import org.kaaproject.kaa.common.dto.ChangeConfigurationNotification;
 import org.kaaproject.kaa.common.dto.ConfigurationDto;
+import org.kaaproject.kaa.common.dto.ConfigurationRecordDto;
 import org.kaaproject.kaa.common.dto.ConfigurationSchemaDto;
-import org.kaaproject.kaa.common.dto.SchemaDto;
-import org.kaaproject.kaa.common.dto.StructureRecordDto;
+import org.kaaproject.kaa.common.dto.HistoryDto;
+import org.kaaproject.kaa.common.dto.VersionDto;
 
 /**
  * The interface Configuration service.
@@ -72,7 +73,7 @@ public interface ConfigurationService {
      * @param includeDeprecated the include deprecated
      * @return the list of structure records
      */
-    Collection<StructureRecordDto<ConfigurationDto>> findAllConfigurationRecordsByEndpointGroupId(String endpointGroupId, boolean includeDeprecated);
+    Collection<ConfigurationRecordDto> findAllConfigurationRecordsByEndpointGroupId(String endpointGroupId, boolean includeDeprecated);
 
     /**
      * Find configuration record by schema id and group id.
@@ -81,7 +82,7 @@ public interface ConfigurationService {
      * @param endpointGroupId the endpoint group id
      * @return the structure record dto
      */
-    StructureRecordDto<ConfigurationDto> findConfigurationRecordBySchemaIdAndEndpointGroupId(String schemaId, String endpointGroupId);
+    ConfigurationRecordDto findConfigurationRecordBySchemaIdAndEndpointGroupId(String schemaId, String endpointGroupId);
 
     /**
      * Find all vacant configuration schemas by group id.
@@ -90,7 +91,7 @@ public interface ConfigurationService {
      * @param endpointGroupId the group id
      * @return the list of schema objects
      */
-    List<SchemaDto> findVacantSchemasByEndpointGroupId(String endpointGroupId);
+    List<VersionDto> findVacantSchemasByEndpointGroupId(String endpointGroupId);
 
     /**
      * Save configuration. Configuration
@@ -103,7 +104,7 @@ public interface ConfigurationService {
     /**
      * Activate configuration. Activate existing inactive configuration.
      * After that last active configuration will be deactivated.
-     * Also will be added information to history {@link HistoryService#saveHistory()}
+     * Also will be added information to history {@link HistoryService#saveHistory(HistoryDto)}}
      *
      * @param id the string id
      * @param activatedUsername the activated username
@@ -154,7 +155,7 @@ public interface ConfigurationService {
      * @param applicationId the application id
      * @return the list
      */
-    List<SchemaDto> findConfigurationSchemaVersionsByAppId(String applicationId);
+    List<VersionDto> findConfigurationSchemaVersionsByAppId(String applicationId);
 
     /**
      * Find latest configuration schema by application id and schema version.
@@ -166,7 +167,7 @@ public interface ConfigurationService {
     ConfigurationSchemaDto findConfSchemaByAppIdAndVersion(String applicationId, int version);
 
     /**
-     * Save Configuration schema. Please see {@link ConfigurationService#saveConfSchema()}
+     * Save Configuration schema. Please see {@link ConfigurationService#saveConfSchema(ConfigurationSchemaDto, String)}
      *
      * @param configurationSchema the configuration schema
      * @param groupId group id for generated default configuration based on schema
@@ -184,8 +185,7 @@ public interface ConfigurationService {
      * <li>Protocol Schema</li>
      * <li>Base Data - Configuration attached to default group</li>
      * </ul>
-     * </p>
-     * After that will added information to history {@link HistoryService#saveHistory()}
+     * After that will added information to history {@link HistoryService#saveHistory(HistoryDto historyDto)}
      *
      * @param configurationSchema the configuration schema
      * @return the configuration schema dto

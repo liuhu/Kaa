@@ -1,18 +1,19 @@
-/*
- * Copyright 2014 CyberVision, Inc.
+/**
+ *  Copyright 2014-2016 CyberVision, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
+
 package org.kaaproject.kaa.server.common.dao.impl.sql;
 
 import org.hibernate.Criteria;
@@ -33,7 +34,7 @@ import static org.kaaproject.kaa.server.common.dao.DaoConstants.APPLICATION_ALIA
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.APPLICATION_PROPERTY;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.APPLICATION_REFERENCE;
 import static org.kaaproject.kaa.server.common.dao.DaoConstants.ID_PROPERTY;
-import static org.kaaproject.kaa.server.common.dao.DaoConstants.MAJOR_VERSION_PROPERTY;
+import static org.kaaproject.kaa.server.common.dao.DaoConstants.VERSION_PROPERTY;
 
 @Repository
 public class HibernateConfigurationSchemaDao extends HibernateAbstractDao<ConfigurationSchema> implements ConfigurationSchemaDao<ConfigurationSchema> {
@@ -63,7 +64,7 @@ public class HibernateConfigurationSchemaDao extends HibernateAbstractDao<Config
         if (isNotBlank(appId)) {
             Criteria criteria = getCriteria().createAlias(APPLICATION_PROPERTY, APPLICATION_ALIAS)
                     .add(Restrictions.eq(APPLICATION_REFERENCE, Long.valueOf(appId)))
-                    .addOrder(Order.desc(MAJOR_VERSION_PROPERTY))
+                    .addOrder(Order.desc(VERSION_PROPERTY))
                     .setMaxResults(FIRST);
             latestSchema = findOneByCriteria(criteria);
         }
@@ -83,7 +84,7 @@ public class HibernateConfigurationSchemaDao extends HibernateAbstractDao<Config
             schema = findOneByCriterionWithAlias(APPLICATION_PROPERTY, APPLICATION_ALIAS,
                     Restrictions.and(
                             Restrictions.eq(APPLICATION_REFERENCE, Long.valueOf(appId)),
-                            Restrictions.eq(MAJOR_VERSION_PROPERTY, version)));
+                            Restrictions.eq(VERSION_PROPERTY, version)));
         }
         if (LOG.isTraceEnabled()) {
             LOG.trace("[{},{}] Search result: {}.", appId, version, schema);
