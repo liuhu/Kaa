@@ -20,6 +20,7 @@ package org.kaaproject.kaa.server.common.dao;
 import java.util.List;
 
 import org.kaaproject.kaa.common.dto.ApplicationDto;
+import org.kaaproject.kaa.common.dto.EndpointStatusDto;
 
 /**
  * The interface Application service.
@@ -84,4 +85,23 @@ public interface ApplicationService {
      * @return the saved application dto object
      */
     ApplicationDto saveApp(ApplicationDto applicationDto);
+
+    /**
+     *
+     * @param nodeId
+     * @param tenantId
+     * @param applicationToken
+     * @param endpointKeyHash
+     * @param status
+     * @return
+     */
+    EndpointStatusDto saveEndpointStatus(String nodeId, String tenantId, String applicationToken, byte[] endpointKeyHash, int status);
+
+    /**
+     *
+     * @param applicationToken
+     * @return
+     */
+    List<EndpointStatusDto> findEndpointStatusByApplicationToken(String applicationToken);
+
 }

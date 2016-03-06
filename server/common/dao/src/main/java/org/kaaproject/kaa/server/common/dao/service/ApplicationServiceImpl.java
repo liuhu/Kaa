@@ -28,15 +28,7 @@ import java.util.List;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.kaaproject.kaa.common.Constants;
-import org.kaaproject.kaa.common.dto.ApplicationDto;
-import org.kaaproject.kaa.common.dto.ConfigurationDto;
-import org.kaaproject.kaa.common.dto.ConfigurationSchemaDto;
-import org.kaaproject.kaa.common.dto.EndpointGroupDto;
-import org.kaaproject.kaa.common.dto.EndpointProfileSchemaDto;
-import org.kaaproject.kaa.common.dto.KaaAuthorityDto;
-import org.kaaproject.kaa.common.dto.NotificationSchemaDto;
-import org.kaaproject.kaa.common.dto.NotificationTypeDto;
-import org.kaaproject.kaa.common.dto.ServerProfileSchemaDto;
+import org.kaaproject.kaa.common.dto.*;
 import org.kaaproject.kaa.common.dto.ctl.CTLSchemaDto;
 import org.kaaproject.kaa.common.dto.logs.LogSchemaDto;
 import org.kaaproject.kaa.server.common.core.schema.DataSchema;
@@ -211,6 +203,21 @@ public class ApplicationServiceImpl implements ApplicationService {
         return appDto;
     }
 
+    @Override
+    public EndpointStatusDto saveEndpointStatus(String nodeId, String tenantId, String applicationToken, byte[] endpointKeyHash, int status) {
+        EndpointStatusDto endpointStatusDto = new EndpointStatusDto();
+        endpointStatusDto.setNodeId(nodeId);
+        endpointStatusDto.setTenantId(tenantId);
+        endpointStatusDto.setApplicationToken(applicationToken);
+        endpointStatusDto.setEndpointKeyHash(endpointKeyHash);
+        endpointStatusDto.setStatus(status);
+        return endpointService.saveEndpointStatus(endpointStatusDto);
+    }
+
+    @Override
+    public List<EndpointStatusDto> findEndpointStatusByApplicationToken(String applicationToken) {
+        return endpointService.findEndpointStatusByApplicationToken(applicationToken);
+    }
 
     private EndpointGroupDto createDefaultGroup(String appId, String createdUsername) {
         EndpointGroupDto endpointGroup = new EndpointGroupDto();

@@ -18,17 +18,7 @@ package org.kaaproject.kaa.server.common.dao;
 
 import java.util.List;
 
-import org.kaaproject.kaa.common.dto.ChangeNotificationDto;
-import org.kaaproject.kaa.common.dto.EndpointConfigurationDto;
-import org.kaaproject.kaa.common.dto.EndpointGroupDto;
-import org.kaaproject.kaa.common.dto.EndpointProfileBodyDto;
-import org.kaaproject.kaa.common.dto.EndpointProfileDto;
-import org.kaaproject.kaa.common.dto.EndpointProfilesBodyDto;
-import org.kaaproject.kaa.common.dto.EndpointProfilesPageDto;
-import org.kaaproject.kaa.common.dto.EndpointUserDto;
-import org.kaaproject.kaa.common.dto.PageLinkDto;
-import org.kaaproject.kaa.common.dto.TopicListEntryDto;
-import org.kaaproject.kaa.common.dto.UpdateNotificationDto;
+import org.kaaproject.kaa.common.dto.*;
 import org.kaaproject.kaa.server.common.dao.exception.KaaOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
@@ -201,6 +191,21 @@ public interface EndpointService {
      * @return the endpoint profile dto
      */
     EndpointProfileDto saveEndpointProfile(EndpointProfileDto endpointProfileDto);
+
+    /**
+     *
+     * @param endpointStatusDto
+     * @return
+     */
+    EndpointStatusDto saveEndpointStatus(EndpointStatusDto endpointStatusDto);
+
+
+    /**
+     * Find endpoint status by application token
+     * @param applicationToken
+     * @return
+     */
+    List<EndpointStatusDto> findEndpointStatusByApplicationToken(String applicationToken);
 
     /**
      * Attach endpoint profile to user.

@@ -107,6 +107,16 @@ public class MongoModelConstants {
     public static final String EP_SERVER_PROFILE_PROPERTY = "srv_profile";
 
     /**
+     * {@link org.kaaproject.kaa.server.common.nosql.mongo.dao.model.MongoEndpointStatus} constants
+     */
+    public static final String ENDPOINT_STATUS = "endpoint_status";
+    public static final String ES_ENDPOINT_KEY_HASH = ENDPOINT_KEY_HASH;
+    public static final String ES_STATUS = "status";
+    public static final String ES_APPLICATION_TOKEN = "application_token";
+    public static final String ES_TENANT_Id = EP_USER_TENANT_ID;
+    public static final String ES_NODE_Id = "node_id";
+
+    /**
      * {@link org.kaaproject.kaa.server.common.nosql.mongo.dao.model.MongoTopicListEntry} constants
      */
     public static final String TOPIC_LIST_ENTRY = "topic_list_entry";

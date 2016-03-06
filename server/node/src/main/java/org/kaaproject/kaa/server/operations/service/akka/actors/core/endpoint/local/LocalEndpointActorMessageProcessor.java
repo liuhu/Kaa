@@ -278,6 +278,7 @@ public class LocalEndpointActorMessageProcessor extends AbstractEndpointActorMes
 
         LOG.trace("[{}][{}] processing sync. Request: {}", endpointKey, context.getRequestHash(), request);
 
+        // TODO; 保存EP profile信息到MongoDB中
         context = operationsService.syncClientProfile(context, request.getProfileSync());
 
         if (context.getStatus() != SyncStatus.SUCCESS) {

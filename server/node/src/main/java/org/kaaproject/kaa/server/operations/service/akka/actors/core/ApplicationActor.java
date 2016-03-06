@@ -452,6 +452,7 @@ public class ApplicationActor extends UntypedActor {
                     Props.create(new LocalEndpointActorCreator(context, endpointActorId, message.getAppToken(), message.getKey()))
                             .withDispatcher(ENDPOINT_DISPATCHER_NAME), endpointActorId), endpointActorId, globalActorNodeId);
             localEndpointSessions.put(message.getKey(), actorMD);
+            recordEndpointStatus(endpointKey, true);
             endpointActorMap.put(endpointActorId, message.getKey());
             context().watch(actorMD.actorRef);
             notifyGlobalEndpointActor(endpointKey, globalActorNodeId);
@@ -517,6 +518,7 @@ public class ApplicationActor extends UntypedActor {
         if (endpointMetaData != null) {
             if (actorKey.equals(endpointMetaData.actorId)) {
                 localEndpointSessions.remove(endpointKey);
+                recordEndpointStatus(endpointKey, false);
                 LOG.debug("[{}] Removed actor [{}] from endpoint sessions map", appToken, actorKey);
             }
         } else {
@@ -542,6 +544,7 @@ public class ApplicationActor extends UntypedActor {
                 LocalEndpointActorMD actorMetaData = localEndpointSessions.get(endpointHash);
                 if (actorMetaData != null && actorMetaData.actorRef.equals(localActor)) {
                     localEndpointSessions.remove(endpointHash);
+                    recordEndpointStatus(endpointHash, false);
                     LOG.debug("[{}] removed endpoint: {}", appToken, localActor);
                     notifyGlobalEndpointActor(endpointHash, actorMetaData.globalActorNodeId, RouteOperation.DELETE);
                 }
@@ -559,6 +562,10 @@ public class ApplicationActor extends UntypedActor {
         } else {
             LOG.warn("remove commands for remote actors are not supported yet!");
         }
+    }
+
+    private void recordEndpointStatus(EndpointObjectHash endpointHash, boolean isAlive) {
+        context.getApplicationService().saveEndpointStatus(nodeId, tenantId, appToken, endpointHash.getData(), isAlive ? 1 : 0);
     }
 
     private ActorRef getOrCreateLogActor() {

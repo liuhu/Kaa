@@ -32,22 +32,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.kaaproject.kaa.common.dto.ChangeDto;
-import org.kaaproject.kaa.common.dto.ChangeNotificationDto;
-import org.kaaproject.kaa.common.dto.ChangeType;
-import org.kaaproject.kaa.common.dto.EndpointConfigurationDto;
-import org.kaaproject.kaa.common.dto.EndpointGroupDto;
-import org.kaaproject.kaa.common.dto.EndpointProfileBodyDto;
-import org.kaaproject.kaa.common.dto.EndpointProfileDto;
-import org.kaaproject.kaa.common.dto.EndpointProfilesBodyDto;
-import org.kaaproject.kaa.common.dto.EndpointProfilesPageDto;
-import org.kaaproject.kaa.common.dto.EndpointUserDto;
-import org.kaaproject.kaa.common.dto.HistoryDto;
-import org.kaaproject.kaa.common.dto.PageLinkDto;
-import org.kaaproject.kaa.common.dto.ServerProfileSchemaDto;
-import org.kaaproject.kaa.common.dto.TopicDto;
-import org.kaaproject.kaa.common.dto.TopicListEntryDto;
-import org.kaaproject.kaa.common.dto.UpdateNotificationDto;
+import org.kaaproject.kaa.common.dto.*;
 import org.kaaproject.kaa.common.dto.ctl.CTLSchemaDto;
 import org.kaaproject.kaa.server.common.dao.CTLService;
 import org.kaaproject.kaa.server.common.dao.EndpointService;
@@ -56,16 +41,8 @@ import org.kaaproject.kaa.server.common.dao.ServerProfileService;
 import org.kaaproject.kaa.server.common.dao.exception.DatabaseProcessingException;
 import org.kaaproject.kaa.server.common.dao.exception.IncorrectParameterException;
 import org.kaaproject.kaa.server.common.dao.exception.KaaOptimisticLockingFailureException;
-import org.kaaproject.kaa.server.common.dao.impl.EndpointConfigurationDao;
-import org.kaaproject.kaa.server.common.dao.impl.EndpointGroupDao;
-import org.kaaproject.kaa.server.common.dao.impl.EndpointProfileDao;
-import org.kaaproject.kaa.server.common.dao.impl.EndpointUserDao;
-import org.kaaproject.kaa.server.common.dao.impl.TopicDao;
-import org.kaaproject.kaa.server.common.dao.impl.TopicListEntryDao;
-import org.kaaproject.kaa.server.common.dao.model.EndpointConfiguration;
-import org.kaaproject.kaa.server.common.dao.model.EndpointProfile;
-import org.kaaproject.kaa.server.common.dao.model.EndpointUser;
-import org.kaaproject.kaa.server.common.dao.model.TopicListEntry;
+import org.kaaproject.kaa.server.common.dao.impl.*;
+import org.kaaproject.kaa.server.common.dao.model.*;
 import org.kaaproject.kaa.server.common.dao.model.sql.EndpointGroup;
 import org.kaaproject.kaa.server.common.dao.model.sql.ModelUtils;
 import org.kaaproject.kaa.server.common.dao.model.sql.Topic;
@@ -96,6 +73,7 @@ public class EndpointServiceImpl implements EndpointService {
     private EndpointConfigurationDao<EndpointConfiguration> endpointConfigurationDao;
     private EndpointUserDao<EndpointUser> endpointUserDao;
     private TopicListEntryDao<TopicListEntry> topicListEntryDao;
+    private EndpointStatusDao<EndpointStatus> endpointStatusDao;
 
     @Override
     @Transactional
@@ -304,6 +282,17 @@ public class EndpointServiceImpl implements EndpointService {
             dto = getDto(endpointProfileDao.save(endpointProfileDto));
         }
         return dto;
+    }
+
+    @Override
+    public EndpointStatusDto saveEndpointStatus(EndpointStatusDto endpointStatusDto) {
+        return getDto(endpointStatusDao.save(endpointStatusDto));
+    }
+
+
+    @Override
+    public List<EndpointStatusDto> findEndpointStatusByApplicationToken(String applicationToken) {
+        return convertDtoList(endpointStatusDao.findByApplicationToken(applicationToken));
     }
 
     @Override
@@ -519,7 +508,11 @@ public class EndpointServiceImpl implements EndpointService {
     public void setTopicListEntryDao(TopicListEntryDao<TopicListEntry> topicListEntryDao) {
         this.topicListEntryDao = topicListEntryDao;
     }
-    
+
+    public void setEndpointStatusDao(EndpointStatusDao<EndpointStatus> endpointStatusDao) {
+        this.endpointStatusDao = endpointStatusDao;
+    }
+
     @Override
     public EndpointUserDto saveEndpointUser(EndpointUserDto endpointUserDto) {
         EndpointUserDto endpointUser = null;
