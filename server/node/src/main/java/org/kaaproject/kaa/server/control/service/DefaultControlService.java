@@ -35,39 +35,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.thrift.TException;
 import org.kaaproject.avro.ui.shared.Fqn;
 import org.kaaproject.kaa.common.avro.GenericAvroConverter;
-import org.kaaproject.kaa.common.dto.AbstractSchemaDto;
-import org.kaaproject.kaa.common.dto.ApplicationDto;
-import org.kaaproject.kaa.common.dto.ChangeConfigurationNotification;
-import org.kaaproject.kaa.common.dto.ChangeNotificationDto;
-import org.kaaproject.kaa.common.dto.ChangeProfileFilterNotification;
-import org.kaaproject.kaa.common.dto.ChangeType;
-import org.kaaproject.kaa.common.dto.ConfigurationDto;
-import org.kaaproject.kaa.common.dto.ConfigurationRecordDto;
-import org.kaaproject.kaa.common.dto.ConfigurationSchemaDto;
-import org.kaaproject.kaa.common.dto.EndpointGroupDto;
-import org.kaaproject.kaa.common.dto.EndpointNotificationDto;
-import org.kaaproject.kaa.common.dto.EndpointProfileBodyDto;
-import org.kaaproject.kaa.common.dto.EndpointProfileDto;
-import org.kaaproject.kaa.common.dto.EndpointProfileSchemaDto;
-import org.kaaproject.kaa.common.dto.EndpointProfilesBodyDto;
-import org.kaaproject.kaa.common.dto.EndpointProfilesPageDto;
-import org.kaaproject.kaa.common.dto.EndpointUserConfigurationDto;
-import org.kaaproject.kaa.common.dto.EndpointUserDto;
-import org.kaaproject.kaa.common.dto.HasId;
-import org.kaaproject.kaa.common.dto.NotificationDto;
-import org.kaaproject.kaa.common.dto.NotificationSchemaDto;
-import org.kaaproject.kaa.common.dto.NotificationTypeDto;
-import org.kaaproject.kaa.common.dto.PageLinkDto;
-import org.kaaproject.kaa.common.dto.ProfileFilterDto;
-import org.kaaproject.kaa.common.dto.ProfileFilterRecordDto;
-import org.kaaproject.kaa.common.dto.ProfileVersionPairDto;
-import org.kaaproject.kaa.common.dto.ServerProfileSchemaDto;
-import org.kaaproject.kaa.common.dto.TenantAdminDto;
-import org.kaaproject.kaa.common.dto.TenantDto;
-import org.kaaproject.kaa.common.dto.TopicDto;
-import org.kaaproject.kaa.common.dto.UpdateNotificationDto;
-import org.kaaproject.kaa.common.dto.UserDto;
-import org.kaaproject.kaa.common.dto.VersionDto;
+import org.kaaproject.kaa.common.dto.*;
 import org.kaaproject.kaa.common.dto.admin.RecordKey;
 import org.kaaproject.kaa.common.dto.admin.RecordKey.RecordFiles;
 import org.kaaproject.kaa.common.dto.admin.SdkPlatform;
@@ -2191,6 +2159,16 @@ public class DefaultControlService implements ControlService {
             return result;
         } else {
             throw new ControlServiceException("Can't find sdk profile by sdk token: " + sdkToken + "!");
+        }
+    }
+
+    @Override
+    public List<EndpointStatusDto> findEndpointStatusByApplicationToken(String applicationToken) throws ControlServiceException {
+        List<EndpointStatusDto> endpointStatusDtoList = applicationService.findEndpointStatusByApplicationToken(applicationToken);
+        if (null != endpointStatusDtoList && !endpointStatusDtoList.isEmpty()) {
+            return endpointStatusDtoList;
+        } else {
+            throw new ControlServiceException("Can't find EPs Status by application token: " + applicationToken + "!");
         }
     }
 
