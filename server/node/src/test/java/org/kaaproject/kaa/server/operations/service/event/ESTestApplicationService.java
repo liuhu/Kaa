@@ -19,6 +19,7 @@ package org.kaaproject.kaa.server.operations.service.event;
 import java.util.List;
 
 import org.kaaproject.kaa.common.dto.ApplicationDto;
+import org.kaaproject.kaa.common.dto.EndpointStatusDto;
 import org.kaaproject.kaa.server.common.dao.ApplicationService;
 
 /**
@@ -81,4 +82,13 @@ public class ESTestApplicationService implements ApplicationService {
         return null;
     }
 
+    @Override
+    public EndpointStatusDto saveEndpointStatus(String nodeId, String tenantId, String applicationToken, byte[] endpointKeyHash, int status) {
+        return null;
+    }
+
+    @Override
+    public List<EndpointStatusDto> findEndpointStatusByApplicationToken(String applicationToken) {
+        return null;
+    }
 }
