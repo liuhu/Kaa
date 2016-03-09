@@ -2172,6 +2172,16 @@ public class DefaultControlService implements ControlService {
         }
     }
 
+    @Override
+    public List<String> findEndpointLogByKeyHash(String applicationToken, String endpointKeyHash) throws ControlServiceException {
+        List<String> endpointLogList = applicationService.findEndpointLogByKeyHash(applicationToken, endpointKeyHash);
+        if (null != endpointLogList && !endpointLogList.isEmpty()) {
+            return endpointLogList;
+        } else {
+            throw new ControlServiceException("Can't find EPs Log endpointKeyHash : " + endpointKeyHash + "!");
+        }
+    }
+
     @PreDestroy
     public void onStop() {
         if (neighbors != null) {

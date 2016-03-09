@@ -49,6 +49,7 @@
     <bean id="endpointUserConfigurationDao" class="org.kaaproject.kaa.server.common.nosql.mongo.dao.EndpointUserConfigurationMongoDao"/>
     <bean id="topicListEntryDao" class="org.kaaproject.kaa.server.common.nosql.mongo.dao.TopicListEntryMongoDao"/>
     <bean id="endpointStatusDao" class="org.kaaproject.kaa.server.common.nosql.mongo.dao.EndpointStatusMongoDao"/>
+    <bean id="endpointLogDao" class="org.kaaproject.kaa.server.common.nosql.mongo.dao.EndpointLogMongoDao"/>
 
     <!-- End of mandatory beans declaration -->
 

@@ -404,4 +404,6 @@ public interface KaaAdminService extends RemoteService {
 
     public List<EndpointStatusDto> getEndpointStatusByApplicationToken(String applicationToken) throws KaaAdminServiceException;
 
+    public List<String> getEndpointLog(String applicationToken, String endpointKeyHash) throws KaaAdminServiceException;
+
 }
