@@ -205,6 +205,8 @@ public abstract class AbstractLogAppender<T extends SpecificRecordBase> implemen
                 LOG.trace("Avro header record converter [{}]", headerConverter);
                 String encodedJsonLogHeader = headerConverter.encodeToJson(header);
                 String encodedJsonLog = eventConverter.encodeToJson(decodedLog);
+                LOG.error("liuhu123 = {}", encodedJsonLogHeader);
+                LOG.error("liuhu456 = {}", encodedJsonLog);
                 events.add(new LogEventDto(encodedJsonLogHeader, encodedJsonLog));
             }
         } catch (IOException e) {
