@@ -91,4 +91,9 @@ public class ESTestApplicationService implements ApplicationService {
     public List<EndpointStatusDto> findEndpointStatusByApplicationToken(String applicationToken) {
         return null;
     }
+
+    @Override
+    public List<String> findEndpointLogByKeyHash(String applicationToken, String endpointKeyHash) {
+        return null;
+    }
 }
