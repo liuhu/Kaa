@@ -2048,10 +2048,10 @@ public class KaaAdminController {
         return kaaAdminService.getEndpointStatusByApplicationToken(applicationToken);
     }
 
-    @RequestMapping(value = "endPointLog/{applicationToken}/{endpointKeyHash}", method = RequestMethod.GET)
+    @RequestMapping(value = "endPointLog", method = RequestMethod.GET)
     @ResponseBody
     public List<String> getEndpointLog(
-            @PathVariable String applicationToken, @PathVariable String endpointKeyHash) throws KaaAdminServiceException {
+            @RequestParam(value = "applicationToken") String applicationToken, @RequestParam(value = "endpointKeyHash") String endpointKeyHash) throws KaaAdminServiceException {
         return kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash);
     }
 
