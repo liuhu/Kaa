@@ -17,6 +17,7 @@
 package org.kaaproject.kaa.server.appenders.mongo.appender;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.kaaproject.kaa.common.dto.logs.LogAppenderDto;
@@ -57,10 +58,18 @@ public class MongoDbLogAppender extends AbstractLogAppender<MongoDbConfig> {
                 ProfileInfo serverProfile = (this.includeServerProfile) ? logEventPack.getServerProfile() : null;
                 
                 LOG.debug("[{}] appending {} logs to mongodb collection", collectionName, logEventPack.getEvents().size());
-                List<LogEventDto> dtos = generateLogEvent(logEventPack, header);
-                LOG.debug("[{}] saving {} objects", collectionName, dtos.size());
-                if (!dtos.isEmpty()) {
-                    logEventDao.save(dtos, clientProfile, serverProfile, collectionName);
+                List<LogEventDto> oldDtos = generateLogEvent(logEventPack, header);
+                List<LogEventDto> newDtos = new ArrayList<>();
+                for (LogEventDto dto : oldDtos) {
+                    LogEventDto logEventDto = new LogEventDto();
+                    logEventDto.setEvent(dto.getEvent().replace("\\\"","\""));
+                    logEventDto.setHeader(dto.getHeader());
+                    logEventDto.setId(dto.getId());
+                    newDtos.add(logEventDto);
+                }
+                LOG.debug("[{}] saving {} objects", collectionName, newDtos.size());
+                if (!newDtos.isEmpty()) {
+                    logEventDao.save(newDtos, clientProfile, serverProfile, collectionName);
                     LOG.debug("[{}] appended {} logs to mongodb collection", collectionName, logEventPack.getEvents().size());
                 }
                 listener.onSuccess();
