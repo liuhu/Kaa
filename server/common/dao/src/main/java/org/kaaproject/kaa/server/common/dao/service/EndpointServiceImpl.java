@@ -74,6 +74,7 @@ public class EndpointServiceImpl implements EndpointService {
     private EndpointUserDao<EndpointUser> endpointUserDao;
     private TopicListEntryDao<TopicListEntry> topicListEntryDao;
     private EndpointStatusDao<EndpointStatus> endpointStatusDao;
+    private EndpointLogDao<String> endpointLogDao;
 
     @Override
     @Transactional
@@ -296,6 +297,12 @@ public class EndpointServiceImpl implements EndpointService {
     }
 
     @Override
+    public List<String> findEndpointLogByKeyHash(String applicationToken, String endpointKeyHash) {
+        return endpointLogDao.findByKeyHash(applicationToken,endpointKeyHash);
+    }
+
+
+    @Override
     public EndpointProfileDto attachEndpointToUser(String userExternalId, String tenantId, EndpointProfileDto profile) {
         validateString(userExternalId, "Incorrect userExternalId " + userExternalId);
         EndpointUser endpointUser = endpointUserDao.findByExternalIdAndTenantId(userExternalId, tenantId);
@@ -511,6 +518,10 @@ public class EndpointServiceImpl implements EndpointService {
 
     public void setEndpointStatusDao(EndpointStatusDao<EndpointStatus> endpointStatusDao) {
         this.endpointStatusDao = endpointStatusDao;
+    }
+
+    public void setEndpointLogDao(EndpointLogDao<String> endpointLogDao) {
+        this.endpointLogDao = endpointLogDao;
     }
 
     @Override

@@ -104,4 +104,6 @@ public interface ApplicationService {
      */
     List<EndpointStatusDto> findEndpointStatusByApplicationToken(String applicationToken);
 
+    List<String> findEndpointLogByKeyHash (String applicationToken, String endpointKeyHash);
+
 }

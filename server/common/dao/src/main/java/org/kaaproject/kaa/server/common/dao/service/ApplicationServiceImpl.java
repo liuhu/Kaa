@@ -219,6 +219,11 @@ public class ApplicationServiceImpl implements ApplicationService {
         return endpointService.findEndpointStatusByApplicationToken(applicationToken);
     }
 
+    @Override
+    public List<String> findEndpointLogByKeyHash(String applicationToken, String endpointKeyHash) {
+        return endpointService.findEndpointLogByKeyHash(applicationToken, endpointKeyHash);
+    }
+
     private EndpointGroupDto createDefaultGroup(String appId, String createdUsername) {
         EndpointGroupDto endpointGroup = new EndpointGroupDto();
         endpointGroup.setName(GROUP_ALL);

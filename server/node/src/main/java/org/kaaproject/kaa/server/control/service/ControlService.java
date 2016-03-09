@@ -1652,4 +1652,13 @@ public interface ControlService {
      */
     List<EndpointStatusDto> findEndpointStatusByApplicationToken(String applicationToken) throws ControlServiceException;
 
+    /**
+     *
+     * @param applicationToken
+     * @param endpointKeyHash
+     * @return
+     * @throws ControlServiceException
+     */
+    List<String> findEndpointLogByKeyHash (String applicationToken, String endpointKeyHash) throws ControlServiceException;
+
 }

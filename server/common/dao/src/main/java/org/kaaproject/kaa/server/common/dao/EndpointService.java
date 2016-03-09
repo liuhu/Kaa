@@ -312,4 +312,7 @@ public interface EndpointService {
      *            the endpoint user id
      */
     void removeEndpointUserById(String id);
+
+
+    List<String> findEndpointLogByKeyHash (String applicationToken, String endpointKeyHash);
 }
