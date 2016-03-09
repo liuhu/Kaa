@@ -110,7 +110,7 @@
 	    <security:access-denied-handler ref="accessDeniedHandler"/>    
 	    <security:anonymous/>
         <security:intercept-url pattern="/kaaAdmin/rest/api/auth/**" access="permitAll"/>
-        <security:intercept-url pattern="/kaaAdmin/rest/**" access="hasAnyRole('KAA_ADMIN','TENANT_ADMIN','TENANT_DEVELOPER','TENANT_USER')"/>
+        <security:intercept-url pattern="/kaaAdmin/rest/api/**" access="hasAnyRole('KAA_ADMIN','TENANT_ADMIN','TENANT_DEVELOPER','TENANT_USER')"/>
 	    <security:custom-filter position="BASIC_AUTH_FILTER" ref="basicAuthenticationFilter"/>	    
 	</security:http>
 	
