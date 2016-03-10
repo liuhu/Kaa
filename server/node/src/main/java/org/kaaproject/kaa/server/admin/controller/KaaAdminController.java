@@ -19,15 +19,16 @@ package org.kaaproject.kaa.server.admin.controller;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gwt.thirdparty.json.JSONArray;
-import com.google.gwt.thirdparty.json.JSONObject;
+import com.google.gwt.thirdparty.guava.common.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.kaaproject.kaa.common.dto.*;
 import org.kaaproject.kaa.common.dto.admin.AuthResultDto;
@@ -2054,12 +2055,16 @@ public class KaaAdminController {
 
     @RequestMapping(value = "endPointLog", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
     @ResponseBody
-    public String getEndpointLog(
+    public  ArrayList<Map<String, String>>  getEndpointLog(
             @RequestParam(value = "applicationToken") String applicationToken, @RequestParam(value = "endpointKeyHash") String endpointKeyHash) throws KaaAdminServiceException {
-        return com.alibaba.fastjson.JSON.toJSONString(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash));
-
+        //return com.alibaba.fastjson.JSON.toJSONString(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash));
         //JSONArray jsonArray = new JSONArray();
         //return jsonArray;
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Map<String, String>>>() {}.getType();
+        ArrayList<Map<String, String>> data = gson.fromJson(kaaAdminService.getEndpointLog(com.alibaba.fastjson.JSON.toJSONString(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash)), endpointKeyHash).toString(), type);
+        return data;
     }
 
     /**
