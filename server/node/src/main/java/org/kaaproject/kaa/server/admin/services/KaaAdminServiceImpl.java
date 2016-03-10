@@ -3498,6 +3498,7 @@ public class KaaAdminServiceImpl implements KaaAdminService, InitializingBean {
                 return null;
             }
             List<String> endpointLogList = controlService.findEndpointLogByKeyHash(applicationToken, endpointKeyHash);
+            LOG.error("liuhu000 = {}", endpointLogList);
             return endpointLogList;
         } catch (Exception cause) {
             throw Utils.handleException(cause);
