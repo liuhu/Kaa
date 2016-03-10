@@ -2054,10 +2054,12 @@ public class KaaAdminController {
 
     @RequestMapping(value = "endPointLog", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
     @ResponseBody
-    public JSONArray getEndpointLog(
+    public String getEndpointLog(
             @RequestParam(value = "applicationToken") String applicationToken, @RequestParam(value = "endpointKeyHash") String endpointKeyHash) throws KaaAdminServiceException {
-        JSONArray jsonArray = new JSONArray(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash));
-        return jsonArray;
+        return com.alibaba.fastjson.JSON.toJSONString(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash));
+
+        //JSONArray jsonArray = new JSONArray();
+        //return jsonArray;
     }
 
     /**
