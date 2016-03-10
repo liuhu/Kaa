@@ -67,6 +67,8 @@ public class MongoDbLogAppender extends AbstractLogAppender<MongoDbConfig> {
                     logEventDto.setId(dto.getId());
                     newDtos.add(logEventDto);
                 }
+                LOG.error("liuhu888 = {}", oldDtos);
+                LOG.error("liuhu789 = {}", newDtos);
                 LOG.debug("[{}] saving {} objects", collectionName, newDtos.size());
                 if (!newDtos.isEmpty()) {
                     logEventDao.save(newDtos, clientProfile, serverProfile, collectionName);
