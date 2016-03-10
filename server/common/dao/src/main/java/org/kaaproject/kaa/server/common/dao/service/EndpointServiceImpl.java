@@ -307,6 +307,7 @@ public class EndpointServiceImpl implements EndpointService {
         } else {
             return null;
         }
+        LOG.error("liuhu111 = {}", newLogList);
         return newLogList;
     }
 
