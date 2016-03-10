@@ -2055,17 +2055,22 @@ public class KaaAdminController {
 
     @RequestMapping(value = "endPointLog", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
     @ResponseBody
-    public  ArrayList<Map<String, String>>  getEndpointLog(
-            @RequestParam(value = "applicationToken") String applicationToken, @RequestParam(value = "endpointKeyHash") String endpointKeyHash) throws KaaAdminServiceException {
+    public void getEndpointLog(
+            @RequestParam(value = "applicationToken") String applicationToken, @RequestParam(value = "endpointKeyHash") String endpointKeyHash, HttpServletResponse response) throws KaaAdminServiceException {
         //return com.alibaba.fastjson.JSON.toJSONString(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash));
         //JSONArray jsonArray = new JSONArray();
         //return jsonArray;
 
-        Gson gson = new Gson();
+        /*Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Map<String, String>>>() {}.getType();
         ArrayList<Map<String, String>> data = gson.fromJson(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash).toString(), type);
-        logger.error("liuhu001 = {}", data);
-        return data;
+        logger.error("liuhu001 = {}", data);*/
+        try {
+            response.getOutputStream().write(com.alibaba.fastjson.JSON.toJSONString(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash)).toString().getBytes("UTF-8"));
+            response.setContentType("text/json; charset=UTF-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
