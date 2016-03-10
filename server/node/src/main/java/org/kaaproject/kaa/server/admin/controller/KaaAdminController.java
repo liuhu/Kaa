@@ -25,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gwt.thirdparty.json.JSONArray;
+import com.google.gwt.thirdparty.json.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.kaaproject.kaa.common.dto.*;
 import org.kaaproject.kaa.common.dto.admin.AuthResultDto;
@@ -2051,11 +2054,10 @@ public class KaaAdminController {
 
     @RequestMapping(value = "endPointLog", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
     @ResponseBody
-    public String getEndpointLog(
+    public JSONArray getEndpointLog(
             @RequestParam(value = "applicationToken") String applicationToken, @RequestParam(value = "endpointKeyHash") String endpointKeyHash) throws KaaAdminServiceException {
-        Gson gson = new Gson();
-        String json = gson.toJson(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash));
-        return json;
+        JSONArray jsonArray = new JSONArray(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash));
+        return jsonArray;
     }
 
     /**
