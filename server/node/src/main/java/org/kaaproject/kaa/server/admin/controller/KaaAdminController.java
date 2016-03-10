@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.google.gwt.thirdparty.guava.common.reflect.TypeToken;
+import com.google.common.reflect.TypeToken;
 import org.apache.commons.lang3.StringUtils;
 import org.kaaproject.kaa.common.dto.*;
 import org.kaaproject.kaa.common.dto.admin.AuthResultDto;
@@ -2063,7 +2063,8 @@ public class KaaAdminController {
 
         Gson gson = new Gson();
         Type type = new TypeToken<ArrayList<Map<String, String>>>() {}.getType();
-        ArrayList<Map<String, String>> data = gson.fromJson(kaaAdminService.getEndpointLog(com.alibaba.fastjson.JSON.toJSONString(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash)), endpointKeyHash).toString(), type);
+        ArrayList<Map<String, String>> data = gson.fromJson(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash).toString(), type);
+        logger.error("liuhu001 = {}", data);
         return data;
     }
 
