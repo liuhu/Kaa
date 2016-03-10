@@ -66,6 +66,7 @@ public class MongoDbLogAppender extends AbstractLogAppender<MongoDbConfig> {
                     logEventDto.setHeader(dto.getHeader());
                     logEventDto.setId(dto.getId());
                     newDtos.add(logEventDto);
+                    LOG.error("liuhu666 = {}", logEventDto);
                 }
                 LOG.error("liuhu888 = {}", oldDtos);
                 LOG.error("liuhu789 = {}", newDtos);
