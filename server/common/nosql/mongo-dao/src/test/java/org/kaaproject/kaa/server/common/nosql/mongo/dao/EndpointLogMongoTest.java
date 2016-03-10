@@ -27,7 +27,7 @@ public class EndpointLogMongoTest extends AbstractTest {
 
     @Test
     public void findLog (){
-        System.out.println("findLog" + endpointLogDao.findByKeyHash("39609493387820613449","CuimbOQZkVG4PcqEGvTb4u9la/s="));
+        System.out.println("findLog" + endpointLogDao.findByKeyHash("04889451674031650167","uCfuL01Emt7TFB3KrlYU95EPKv8="));
     }
 
 }

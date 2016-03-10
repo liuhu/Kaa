@@ -298,17 +298,7 @@ public class EndpointServiceImpl implements EndpointService {
 
     @Override
     public List<String> findEndpointLogByKeyHash(String applicationToken, String endpointKeyHash) {
-        List<String> oldLogList = endpointLogDao.findByKeyHash(applicationToken,endpointKeyHash);
-        List<String> newLogList = new ArrayList<>();
-        if (null != oldLogList && !oldLogList.isEmpty()) {
-            for (String log : oldLogList) {
-                newLogList.add(log.replace("\\\"","\""));
-            }
-        } else {
-            return null;
-        }
-        LOG.error("liuhu111 = {}", newLogList);
-        return newLogList;
+        return endpointLogDao.findByKeyHash(applicationToken,endpointKeyHash);
     }
 
 
