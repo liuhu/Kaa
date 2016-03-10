@@ -2066,7 +2066,7 @@ public class KaaAdminController {
         ArrayList<Map<String, String>> data = gson.fromJson(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash).toString(), type);
         logger.error("liuhu001 = {}", data);*/
         try {
-            response.getOutputStream().write(com.alibaba.fastjson.JSON.toJSONString(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash)).toString().getBytes("UTF-8"));
+            response.getOutputStream().write(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash).toString().getBytes("UTF-8"));
             response.setContentType("text/json; charset=UTF-8");
         } catch (IOException e) {
             e.printStackTrace();
