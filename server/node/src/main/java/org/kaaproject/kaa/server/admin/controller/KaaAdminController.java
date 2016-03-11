@@ -2068,7 +2068,7 @@ public class KaaAdminController {
         try {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
-            response.getWriter().print(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash).get(0));
+            response.getWriter().print(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash));
         } catch (IOException e) {
             e.printStackTrace();
         }
