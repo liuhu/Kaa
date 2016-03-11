@@ -2178,7 +2178,7 @@ public class DefaultControlService implements ControlService {
         if (null != endpointLogList && !endpointLogList.isEmpty()) {
             return endpointLogList;
         } else {
-            throw new ControlServiceException("Can't find EPs Log endpointKeyHash : " + endpointKeyHash + "!");
+            return null;
         }
     }
 

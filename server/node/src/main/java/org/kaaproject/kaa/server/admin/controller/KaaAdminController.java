@@ -2053,7 +2053,7 @@ public class KaaAdminController {
         return kaaAdminService.getEndpointStatusByApplicationToken(applicationToken);
     }
 
-    @RequestMapping(value = "endPointLog", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
+    @RequestMapping(value = "endPointLog", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void getEndpointLog(
             @RequestParam(value = "applicationToken") String applicationToken, @RequestParam(value = "endpointKeyHash") String endpointKeyHash, HttpServletResponse response) throws KaaAdminServiceException {
@@ -2066,8 +2066,9 @@ public class KaaAdminController {
         ArrayList<Map<String, String>> data = gson.fromJson(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash).toString(), type);
         logger.error("liuhu001 = {}", data);*/
         try {
-            response.getOutputStream().write(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash).toString().getBytes("UTF-8"));
-            response.setContentType("text/json; charset=UTF-8");
+            response.setContentType("application/json");
+            response.setCharacterEncoding("utf-8");
+            response.getWriter().print(kaaAdminService.getEndpointLog(applicationToken, endpointKeyHash));
         } catch (IOException e) {
             e.printStackTrace();
         }
