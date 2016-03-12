@@ -1,7 +1,5 @@
 package org.kaaproject.kaa.server.admin.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.kaaproject.kaa.common.dto.EndpointStatusDto;
 import org.kaaproject.kaa.server.admin.shared.services.KaaAdminService;
 import org.kaaproject.kaa.server.admin.shared.services.KaaAdminServiceException;
