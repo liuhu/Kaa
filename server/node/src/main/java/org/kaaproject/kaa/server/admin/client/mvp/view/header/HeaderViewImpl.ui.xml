@@ -28,7 +28,7 @@
                 <gwt:HorizontalPanel height="100%">
                     <gwt:cell horizontalAlignment="ALIGN_LEFT" verticalAlignment="ALIGN_MIDDLE">
                         <gwt:Label styleName="{kaaAdminStyle.bAppHeaderTitle}" width="220px" height="100%" ui:field="title">
-                            Kaa
+                            ACloud
                         </gwt:Label>
                     </gwt:cell>
                     <gwt:cell horizontalAlignment="ALIGN_LEFT" verticalAlignment="ALIGN_MIDDLE">
